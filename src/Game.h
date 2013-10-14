@@ -6,18 +6,26 @@
 #include <SFML/Graphics.hpp>
 
 #include "Ship.h"
+#include "MouseInput.h"
 
 class Game {
 	public:
 		Game();
 		~Game();
-		void init();
 		void run();
 
 	private:
-		std::vector<Ship> playerShips;
+		std::vector<sf::Vector2f> _selectPoints;
+		std::vector<Ship> _playerShips;
+		MouseInput _inputDevice;
 
-		//sf::RenderWindow window;
+		sf::RenderWindow _window;
+		sf::Clock _clock;
+		bool _running;
+
+		void pollForWindowEvent();
+		void update();
+		void draw();
 };
 
 #endif //GAME_H
