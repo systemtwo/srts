@@ -1,9 +1,10 @@
-SFML_INCLUDE="../../SFML2-master/SFML-master/include"
-SFML_LIBS="../../SFML2-master/build/lib"
+SFML_INCLUDE="../../SFML-2.1-sources/SFML-2.1/include"
+SFML_LIBS="../../SFML-2.1-sources/build/lib"
 
 CC=g++
-CFLAGS=-c -Wall -I$(SFML_INCLUDE) -DSFML_DYNAMIC
+CFLAGS=-c -Wall -I$(SFML_INCLUDE) -DSFML_DYNAMIC 
 LDFLAGS=-L$(SFML_LIBS) -lsfml-graphics -lsfml-window -lsfml-system
+
 SOURCES=$(wildcard src/*.cpp)
 OBJECTS=$(addprefix obj/,$(notdir $(SOURCES:.cpp=.o)))
 EXEC=main.exe
@@ -11,7 +12,7 @@ EXEC=main.exe
 all: $(EXEC) 
 
 $(EXEC): $(OBJECTS)
-	$(CC) $(LDFLAGS) -o $@ $^
+	$(CC) -o $@ $^ $(LDFLAGS)
 
 obj/%.o: src/%.cpp
 	$(CC) $(CFLAGS) $< -o $@
