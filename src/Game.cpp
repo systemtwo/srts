@@ -11,13 +11,20 @@ Game::Game()
 	  _running(true),
 	  _isSelecting(false) {
 	
-	_window.setFramerateLimit(10);
+	_window.setFramerateLimit(60);
 
 
 	//Testing
-	//_playerShips.push_back(new DroneShip(100,100));
 	_playerShips.push_back(new DroneShip(200,100));
-	//_playerShips.push_back(new DroneShip(700,600));
+
+	std::vector<sf::Vector2f> poly;
+	poly.push_back(sf::Vector2f(50,50));
+	poly.push_back(sf::Vector2f(50,150));
+	poly.push_back(sf::Vector2f(150,150));
+	poly.push_back(sf::Vector2f(150,50));
+
+	if (GeomUtil::pointInPolygon(poly, 100, 100))
+		std::cout << "Test 1 passed" << std::endl;
 
 }
 

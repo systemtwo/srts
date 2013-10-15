@@ -10,6 +10,14 @@ Line::Line(double _x1, double _y1, double _x2, double _y2)
 	  y1(_y1),
 	  x2(_x2),
 	  y2(_y2) {
+	//Cheat to make NaNs (0 slope) and inf slope go away
+	if (x1 == x2) {
+		x1 += 0.01;
+	}
+	if (y1 == y2) {
+		y1 += 0.01;
+	}
+
 }
 
 double Line::slope() {
@@ -38,13 +46,12 @@ bool GeomUtil::lineIntersection(Line l1, Line l2) {
 	double minX2 = fmin(l2.x1, l2.x2);
 	double maxX2 = fmax(l2.x1, l2.x2);
 	
-	std::cout << "Intersect X " << intersectX << std::endl;
-
+	//std::cout << "Intersection at " << intersectX << std::endl;
 	//Check for NaN
 	if (intersectX != intersectX)
 		return false;
 
-	if (intersectX < maxX1 && intersectX > minX1 && intersectX < maxX2 && intersectX > minX2 ) 
+	if (intersectX <= maxX1 && intersectX >= minX1 && intersectX <= maxX2 && intersectX >= minX2 ) 
 		return true;
 	else 
 		return false;
@@ -52,13 +59,11 @@ bool GeomUtil::lineIntersection(Line l1, Line l2) {
 
 bool GeomUtil::pointInPolygon(std::vector<sf::Vector2f> polygon, double x, double y) {
 	Line ray(-1000, y, x, y);
-	std::cout << "Ray " << ray << std::endl;
 	int intersectCount = 0;
 	for (int i = 0; i < polygon.size() - 1; i++) {
 		Line l(polygon[i].x, polygon[i].y, polygon[i + 1].x, polygon[i + 1].y);
-		std::cout << l << std::endl;
+		//std::cout << l << std::endl;
 		if (lineIntersection(l, ray)) {
-			std::cout << "Intersect!" << std::endl;
 			intersectCount++;
 		}
 	}
