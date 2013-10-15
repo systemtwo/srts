@@ -60,7 +60,7 @@ bool GeomUtil::lineIntersection(Line l1, Line l2) {
 bool GeomUtil::pointInPolygon(std::vector<sf::Vector2f> polygon, double x, double y) {
 	Line ray(-1000, y, x, y);
 	int intersectCount = 0;
-	for (int i = 0; i < polygon.size() - 1; i++) {
+	for (unsigned int i = 0; i < polygon.size() - 1; i++) {
 		Line l(polygon[i].x, polygon[i].y, polygon[i + 1].x, polygon[i + 1].y);
 		//std::cout << l << std::endl;
 		if (lineIntersection(l, ray)) {

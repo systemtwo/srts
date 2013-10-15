@@ -13,6 +13,7 @@ class Ship {
 		virtual std::string getName() { return ""; };
 
 		virtual void setSelected(bool selected) { };
+		virtual void setMoveLocation(double x, double y) {};
 };
 
 #endif //SHIP_H
