@@ -1,6 +1,7 @@
 #ifndef GEOM_UTIL_H
 #define GEOM_UTIL_H
 
+#include <iostream>
 #include <vector>
 
 #include <SFML/System.hpp>
@@ -16,6 +17,7 @@ class Line {
 		double x2;
 		double y2;
 };
+std::ostream& operator<< (std::ostream& os, const Line& line);
 
 class GeomUtil {
 	public:
