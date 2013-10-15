@@ -20,6 +20,7 @@ Game::Game()
 	//_playerShips.push_back(new DroneShip(300,500));
 	//_playerShips.push_back(new DroneShip(200,100));
 
+#ifdef WITH_TESTS
 	std::vector<sf::Vector2f> poly;
 	poly.push_back(sf::Vector2f(50,50));
 	poly.push_back(sf::Vector2f(50,150));
@@ -31,6 +32,7 @@ Game::Game()
 	else 
 		std::cout << "Test 1 failed" << std::endl;
 
+#endif //WITH_TESTS
 }
 
 Game::~Game() {
