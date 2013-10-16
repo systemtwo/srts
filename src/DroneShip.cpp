@@ -41,36 +41,6 @@ void DroneShip::update(double dt) {
 	else
 		_angle += TURNING_SPEED * dt;
 
-	/*
-	double delta = fmax(targetAngle, _angle) - fmin(targetAngle, _angle);
-	if (targetAngle > _angle)
-		_angle += TURNING_SPEED * dt;
-	else
-		_angle -= TURNING_SPEED * dt;
-	*/
-
-	/*
-	if (targetAngle > _angle) {
-		std::cout << "1";
-		if ((targetAngle - _angle) < (PI/2.0))
-			_angle += TURNING_SPEED * dt;
-		else 
-			_angle -= TURNING_SPEED * dt;
-	} else {
-		if ((_angle - targetAngle) < (PI/2.0))
-			_angle -= TURNING_SPEED * dt;
-		else
-			_angle += TURNING_SPEED * dt;
-	}*/
-			
-	
-	/*
-	double angDiff = targetAngle - _angle;
-	if (angDiff > 0) 
-		_angle += TURNING_SPEED * dt;
-	else
-		_angle -= TURNING_SPEED * dt;
-	*/
 	
 	//Move with turning
 	double xmove = SPEED * cos(_angle) * dt;
@@ -79,11 +49,13 @@ void DroneShip::update(double dt) {
 	_x += xmove;
 	_y += ymove;
 
+	/*
 	std::cout << "dt: " << dt << std::endl;
 	std::cout << "Non-dt speeds: " << SPEED * cos(_angle) << ", " << SPEED * sin(_angle) << std::endl;
 	std::cout << "Moving speed: " << xmove << ", " << ymove << std::endl;
 	std::cout << "Current Angle: " << _angle << std::endl;
 	std::cout << "Target Angle: " << targetAngle << std::endl;
+	*/
 }
 
 void DroneShip::draw(sf::RenderWindow& window) {

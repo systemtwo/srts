@@ -29,7 +29,8 @@ class DroneShip : public Ship {
 		bool _selected;
 
 		const double SPEED = 100.0;
-		const double TURNING_SPEED = 1.57;
+		//const double TURNING_SPEED = 1.57;
+		const double TURNING_SPEED = 3.14;
 };
 
 #endif //DRONE_SHIP_H
