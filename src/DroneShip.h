@@ -25,9 +25,11 @@ class DroneShip : public Ship {
 		double _y;
 		double _targetX;
 		double _targetY;
+		double _angle;
 		bool _selected;
 
-		const int SPEED = 10;
+		const double SPEED = 100.0;
+		const double TURNING_SPEED = 1.57;
 };
 
 #endif //DRONE_SHIP_H

@@ -79,3 +79,11 @@ bool GeomUtil::pointInPolygon(std::vector<sf::Vector2f> polygon, double x, doubl
 	else 
 		return true;
 }
+
+double GeomUtil::degToRad(double deg) {
+	return deg * (PI/180.0);
+}
+
+double GeomUtil::radToDeg(double rad) {
+	return rad * (180.0/PI);
+}

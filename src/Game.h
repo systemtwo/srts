@@ -15,15 +15,15 @@ class Game {
 		void run();
 
 	private:
+		sf::RenderWindow _window;
+		sf::Clock _clock;
+
 		std::vector<sf::Vector2f> _selectPoints;
 		std::vector<Ship*> _playerShips;
 		std::vector<Ship*> _selectedShips;
 		MouseInput _inputDevice;
-		bool _isSelecting;
 		bool _running;
-
-		sf::RenderWindow _window;
-		sf::Clock _clock;
+		bool _isSelecting;
 
 		void pollForWindowEvent();
 		void update();

@@ -6,6 +6,8 @@
 
 #include <SFML/System.hpp>
 
+#define PI (3.141592653589793)
+
 //Geometry utilities
 class Line {
 	public:
@@ -23,6 +25,8 @@ class GeomUtil {
 	public:
 		static bool lineIntersection(Line, Line);
 		static bool pointInPolygon(std::vector<sf::Vector2f> polygon, double x, double y);
+		static double degToRad(double deg);
+		static double radToDeg(double rad);
 };
 
 

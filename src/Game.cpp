@@ -15,10 +15,8 @@ Game::Game()
 
 
 	//Testing
-	_playerShips.push_back(new DroneShip(200,100));
-	_playerShips.push_back(new DroneShip(400,150));
-	//_playerShips.push_back(new DroneShip(300,500));
 	//_playerShips.push_back(new DroneShip(200,100));
+	_playerShips.push_back(new DroneShip(400,150));
 
 #ifdef WITH_TESTS
 	std::vector<sf::Vector2f> poly;
@@ -115,7 +113,7 @@ void Game::draw() {
 		_window.draw(r);
 	}
 
-	for (int i = 0; i < _playerShips.size(); i++) {
+	for (unsigned int i = 0; i < _playerShips.size(); i++) {
 		_playerShips[i]->draw(_window);
 	}
 

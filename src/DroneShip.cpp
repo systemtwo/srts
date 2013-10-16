@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "DroneShip.h"
+#include "GeomUtil.h"
 
 DroneShip::DroneShip(double x, double y) 
 	: _x(x),
@@ -10,23 +11,79 @@ DroneShip::DroneShip(double x, double y)
 
 	_targetX = x;
 	_targetY = y;
+	_angle = 1.57;
 }
 
 void DroneShip::update(double dt) {
-	//Move Drone
-	double dist = hypot(_targetX - _x, _targetY - _y);
+	//Fix angle if needed
+	if (_angle > (3.0 * PI))
+		_angle -= 2.0 * PI;
+	if (_angle < -PI) 
+		_angle += 2.0 * PI;
 
-	//Hack for 0 dist 
-	if (dist == 0) 
-		dist = 0.0001;
 
-	double ratio = SPEED/dist;
+	//Turn towards target
+	double targetAngle = atan2(_targetY - _y, _targetX - _x);
+	if (targetAngle < 0)
+		targetAngle = (2.0 * PI) + targetAngle;
+
+	//Cross product method
+	double vecTargetX = _targetX - _x;
+	double vecTargetY = _targetY - _y;
+
+	double vecFacingX = cos(_angle);
+	double vecFacingY = sin(_angle);
+
+
+	std::cout <<"Cross product" << ((vecTargetX * vecFacingY) - (vecTargetY * vecFacingX)) << std::endl;
+	if (((vecTargetX * vecFacingY) - (vecTargetY * vecFacingX)) > 0) 
+		_angle -= TURNING_SPEED * dt;
+	else
+		_angle += TURNING_SPEED * dt;
+
+	/*
+	double delta = fmax(targetAngle, _angle) - fmin(targetAngle, _angle);
+	if (targetAngle > _angle)
+		_angle += TURNING_SPEED * dt;
+	else
+		_angle -= TURNING_SPEED * dt;
+	*/
+
+	/*
+	if (targetAngle > _angle) {
+		std::cout << "1";
+		if ((targetAngle - _angle) < (PI/2.0))
+			_angle += TURNING_SPEED * dt;
+		else 
+			_angle -= TURNING_SPEED * dt;
+	} else {
+		if ((_angle - targetAngle) < (PI/2.0))
+			_angle -= TURNING_SPEED * dt;
+		else
+			_angle += TURNING_SPEED * dt;
+	}*/
+			
 	
-	double xspeed = (_targetX - _x) * ratio;
-	double yspeed = (_targetY - _y) * ratio;
+	/*
+	double angDiff = targetAngle - _angle;
+	if (angDiff > 0) 
+		_angle += TURNING_SPEED * dt;
+	else
+		_angle -= TURNING_SPEED * dt;
+	*/
+	
+	//Move with turning
+	double xmove = SPEED * cos(_angle) * dt;
+	double ymove = SPEED * sin(_angle) * dt;
 
-	_x += xspeed * dt;
-	_y += yspeed * dt;
+	_x += xmove;
+	_y += ymove;
+
+	std::cout << "dt: " << dt << std::endl;
+	std::cout << "Non-dt speeds: " << SPEED * cos(_angle) << ", " << SPEED * sin(_angle) << std::endl;
+	std::cout << "Moving speed: " << xmove << ", " << ymove << std::endl;
+	std::cout << "Current Angle: " << _angle << std::endl;
+	std::cout << "Target Angle: " << targetAngle << std::endl;
 }
 
 void DroneShip::draw(sf::RenderWindow& window) {
@@ -38,6 +95,7 @@ void DroneShip::draw(sf::RenderWindow& window) {
 
 	rect.setPosition(sf::Vector2f(_x, _y));
 	rect.setSize(sf::Vector2f(2, 2));
+	rect.setRotation(_angle);
 	window.draw(rect);
 
 	//Draw target location marker
