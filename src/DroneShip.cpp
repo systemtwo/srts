@@ -6,56 +6,12 @@
 #include "GeomUtil.h"
 
 DroneShip::DroneShip(double x, double y) 
-	: _x(x),
-	  _y(y) {
-
-	_targetX = x;
-	_targetY = y;
-	_angle = 1.57;
+	: _health(100),
+	  _navigation(x, y, 100.0, PI) {
 }
 
 void DroneShip::update(double dt) {
-	//Fix angle if needed
-	if (_angle > (3.0 * PI))
-		_angle -= 2.0 * PI;
-	if (_angle < -PI) 
-		_angle += 2.0 * PI;
-
-
-	//Turn towards target
-	double targetAngle = atan2(_targetY - _y, _targetX - _x);
-	if (targetAngle < 0)
-		targetAngle = (2.0 * PI) + targetAngle;
-
-	//Cross product method
-	double vecTargetX = _targetX - _x;
-	double vecTargetY = _targetY - _y;
-
-	double vecFacingX = cos(_angle);
-	double vecFacingY = sin(_angle);
-
-
-	std::cout <<"Cross product" << ((vecTargetX * vecFacingY) - (vecTargetY * vecFacingX)) << std::endl;
-	if (((vecTargetX * vecFacingY) - (vecTargetY * vecFacingX)) > 0) 
-		_angle -= TURNING_SPEED * dt;
-	else
-		_angle += TURNING_SPEED * dt;
-
-	
-	//Move with turning
-	double xmove = SPEED * cos(_angle) * dt;
-	double ymove = SPEED * sin(_angle) * dt;
-
-	_x += xmove;
-	_y += ymove;
-
-	/*
-	std::cout << "dt: " << dt << std::endl;
-	std::cout << "Non-dt speeds: " << SPEED * cos(_angle) << ", " << SPEED * sin(_angle) << std::endl;
-	std::cout << "Moving speed: " << xmove << ", " << ymove << std::endl;
-	std::cout << "Current Angle: " << _angle << std::endl;
-	std::cout << "Target Angle: " << targetAngle << std::endl;
-	*/
+	_navigation.update(dt);
 }
 
 void DroneShip::draw(sf::RenderWindow& window) {
@@ -65,9 +21,9 @@ void DroneShip::draw(sf::RenderWindow& window) {
 	else 
 		rect.setFillColor(sf::Color::Yellow);
 
-	rect.setPosition(sf::Vector2f(_x, _y));
+	rect.setPosition(_navigation.getPosition());
 	rect.setSize(sf::Vector2f(2, 2));
-	rect.setRotation(_angle);
+	rect.setRotation(_navigation.getAngle());
 	window.draw(rect);
 
 	//Draw target location marker
@@ -75,7 +31,7 @@ void DroneShip::draw(sf::RenderWindow& window) {
 	if (_selected) {
 		sf::RectangleShape tmarker;
 		tmarker.setFillColor(sf::Color::Cyan);
-		tmarker.setPosition(sf::Vector2f(_targetX, _targetY));
+		tmarker.setPosition(_navigation.getTarget());
 		tmarker.setSize(sf::Vector2f(2, 2));
 		window.draw(tmarker);
 	}
@@ -83,7 +39,7 @@ void DroneShip::draw(sf::RenderWindow& window) {
 }
 
 sf::Vector2f DroneShip::getPosition() {
-	return sf::Vector2f(_x, _y);
+	return _navigation.getPosition();
 }
 
 std::string DroneShip::getName() {
@@ -95,6 +51,5 @@ void DroneShip::setSelected(bool selected) {
 }
 
 void DroneShip::setMoveLocation(double x, double y) {
-	_targetX = x;
-	_targetY = y;
+	_navigation.setTarget(x, y);
 }

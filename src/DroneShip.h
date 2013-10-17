@@ -6,6 +6,8 @@
 #include <SFML/System.hpp>
 
 #include "Ship.h"
+#include "ComponentHealth.h"
+#include "ComponentNavigation.h"
 
 class DroneShip : public Ship {
 	public:
@@ -21,15 +23,12 @@ class DroneShip : public Ship {
 		void setMoveLocation(double x, double y);
 
 	private:
-		double _x;
-		double _y;
-		double _targetX;
-		double _targetY;
-		double _angle;
+		ComponentNavigation _navigation;
+		ComponentHealth _health;
+
 		bool _selected;
 
 		const double SPEED = 100.0;
-		//const double TURNING_SPEED = 1.57;
 		const double TURNING_SPEED = 3.14;
 };
 
