@@ -5,9 +5,13 @@
 #include "DroneShip.h"
 #include "GeomUtil.h"
 
-DroneShip::DroneShip(double x, double y) 
+DroneShip::DroneShip(double x, double y, int team) 
 	: _health(100),
-	  _navigation(x, y, 100.0, PI) {
+	  _navigation(x, y, 100.0, PI), 
+	  _team(team) {
+	
+	_health.setSize(sf::Vector2f(20, 5));
+	
 }
 
 void DroneShip::update(double dt) {
@@ -44,6 +48,10 @@ sf::Vector2f DroneShip::getPosition() {
 
 std::string DroneShip::getName() {
 	return std::string("Drone");
+}
+
+int DroneShip::getTeam() {
+	return _team;
 }
 
 void DroneShip::setSelected(bool selected) {

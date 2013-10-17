@@ -22,6 +22,7 @@ class Ship {
 		virtual void draw(sf::RenderWindow& window) = 0;
 		virtual sf::Vector2f getPosition() = 0;
 		virtual std::string getName() = 0;
+		virtual int getTeam() = 0;
 
 		virtual void setSelected(bool selected) = 0;
 		virtual void setMoveLocation(double x, double y) = 0;

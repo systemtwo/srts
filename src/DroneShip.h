@@ -11,13 +11,14 @@
 
 class DroneShip : public Ship {
 	public:
-		DroneShip(double, double);
+		DroneShip(double x, double y, int team);
 
 		void update(double dt);
 		void draw(sf::RenderWindow& window);
 		
 		sf::Vector2f getPosition();
 		std::string getName();
+		int getTeam();
 
 		void setSelected(bool selected);
 		void setMoveLocation(double x, double y);
@@ -27,6 +28,7 @@ class DroneShip : public Ship {
 		ComponentHealth _health;
 
 		bool _selected;
+		int _team;
 
 		const double SPEED = 100.0;
 		const double TURNING_SPEED = 3.14;

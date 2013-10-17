@@ -15,8 +15,8 @@ Game::Game()
 
 
 	//Testing
-	_playerShips.push_back(new DroneShip(200,100));
-	_playerShips.push_back(new DroneShip(400,150));
+	_playerShips.push_back(new DroneShip(200,100,1));
+	_playerShips.push_back(new DroneShip(400,150,1));
 
 #ifdef WITH_TESTS
 	std::vector<sf::Vector2f> poly;

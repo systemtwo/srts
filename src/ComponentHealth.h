@@ -7,7 +7,8 @@
 class ComponentHealth {
 	public:
 		ComponentHealth(double maxHealth)
-			: _maxHealth(maxHealth) {
+			: _maxHealth(maxHealth),
+	       		  _health(maxHealth) {
 		}
 
 		void setColor(sf::Color color) { _color = color; }
