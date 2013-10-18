@@ -1,5 +1,5 @@
-#ifndef COMPONENT_NAVIGATION
-#define COMPONENT_NAVIGATION
+#ifndef COMPONENT_NAVIGATION_H
+#define COMPONENT_NAVIGATION_H
 
 #include "GeomUtil.h"
 
@@ -79,4 +79,4 @@ class ComponentNavigation {
 
 };
 
-#endif //COMPONENT_NAVIGATION
+#endif //COMPONENT_NAVIGATION_H

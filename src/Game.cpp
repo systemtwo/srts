@@ -9,14 +9,18 @@ Game::Game()
 	: _window(sf::VideoMode(800,600), "SimpleRTS"),
 	  _inputDevice(_window),
 	  _running(true),
-	  _isSelecting(false) {
+	  _isSelecting(false),
+	  _world() {
 	
 	_window.setFramerateLimit(60);
 
 
 	//Testing
-	_playerShips.push_back(new DroneShip(200,100,1));
-	_playerShips.push_back(new DroneShip(400,150,1));
+	//_playerShips.push_back(new DroneShip(200,100,1));
+	//_playerShips.push_back(new DroneShip(400,150,1));
+	
+	_world.addShip(new DroneShip(200, 100, 1));
+	_world.addShip(new DroneShip(400, 150, 1));
 
 #ifdef WITH_TESTS
 	std::vector<sf::Vector2f> poly;
@@ -46,18 +50,21 @@ void Game::run() {
 
 void Game::update() {
 	auto dt = (double)_clock.restart().asMilliseconds() / 1000.0;
-	for (auto ship : _playerShips) {
-		ship->update(dt);
+
+	auto _allShips = _world.getAllShips();
+	for (auto ship : _allShips) {
+		ship->update(dt, &_world);
 	}
 
 	if (_inputDevice.isSelecting()) {
+		//Define selection vertices
 		_selectPoints.push_back(sf::Vector2f(_inputDevice.getX(), _inputDevice.getY()));
 		_isSelecting = true;
 	} else {
 		if (_isSelecting) {
 			//Was just selecting
 			_selectedShips.clear();
-			for (auto ship : _playerShips) {
+			for (auto ship : _allShips) {
 				if (GeomUtil::pointInPolygon(_selectPoints, ship->getPosition().x, ship->getPosition().y)) {
 					std::cout << "Ship " << ship->getName() << " selected." << std::endl;
 					ship->setSelected(true);
@@ -74,23 +81,25 @@ void Game::update() {
 	if (_inputDevice.isMoving()) {
 		if (_selectedShips.size() == 0) {
 			//Move camera
-		}
-		//Find center
-		double cx = 0;
-		double cy = 0;
-		for (auto ship : _selectedShips) {
-			cx += ship->getPosition().x;
-			cy += ship->getPosition().y;
-		}
-		cx /= _selectedShips.size();
-		cy /= _selectedShips.size();
+		} else {
+			//Otherwise move ships
+			//Find center
+			double cx = 0;
+			double cy = 0;
+			for (auto ship : _selectedShips) {
+				cx += ship->getPosition().x;
+				cy += ship->getPosition().y;
+			}
+			cx /= _selectedShips.size();
+			cy /= _selectedShips.size();
 
-		for (auto ship : _selectedShips) {
-			//Get relative position
-			double relX = ship->getPosition().x - cx;
-			double relY = ship->getPosition().y - cy;
+			for (auto ship : _selectedShips) {
+				//Get relative position
+				double relX = ship->getPosition().x - cx;
+				double relY = ship->getPosition().y - cy;
 
-			ship->setMoveLocation(_inputDevice.getX() + relX, _inputDevice.getY() + relY);
+				ship->setMoveLocation(_inputDevice.getX() + relX, _inputDevice.getY() + relY);
+			}
 		}
 
 	}
@@ -113,8 +122,10 @@ void Game::draw() {
 		_window.draw(r);
 	}
 
-	for (unsigned int i = 0; i < _playerShips.size(); i++) {
-		_playerShips[i]->draw(_window);
+
+	auto _allShips = _world.getAllShips();
+	for (unsigned int i = 0; i < _allShips.size(); i++) {
+		_allShips[i]->draw(_window);
 	}
 
 	_window.display();

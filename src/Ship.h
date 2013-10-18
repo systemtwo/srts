@@ -3,8 +3,11 @@
 
 #include <string>
 
+#include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 
+
+class World;
 class Ship {
 	public:
 		/*
@@ -18,7 +21,7 @@ class Ship {
 		*/
 
 
-		virtual void update (double dt) = 0;
+		virtual void update (double dt, World* world) = 0;
 		virtual void draw(sf::RenderWindow& window) = 0;
 		virtual sf::Vector2f getPosition() = 0;
 		virtual std::string getName() = 0;

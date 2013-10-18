@@ -8,12 +8,13 @@
 #include "Ship.h"
 #include "ComponentHealth.h"
 #include "ComponentNavigation.h"
+#include "World.h"
 
 class DroneShip : public Ship {
 	public:
 		DroneShip(double x, double y, int team);
 
-		void update(double dt);
+		void update(double dt, World* world);
 		void draw(sf::RenderWindow& window);
 		
 		sf::Vector2f getPosition();

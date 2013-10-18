@@ -14,7 +14,7 @@ DroneShip::DroneShip(double x, double y, int team)
 	
 }
 
-void DroneShip::update(double dt) {
+void DroneShip::update(double dt, World* world) {
 	_navigation.update(dt);
 }
 
@@ -26,8 +26,9 @@ void DroneShip::draw(sf::RenderWindow& window) {
 		rect.setFillColor(sf::Color::Yellow);
 
 	rect.setPosition(_navigation.getPosition());
-	rect.setSize(sf::Vector2f(2, 2));
-	rect.setRotation(_navigation.getAngle());
+	rect.setSize(sf::Vector2f(10, 10));
+	rect.setOrigin(sf::Vector2f(5,5));
+	rect.setRotation(GeomUtil::radToDeg(_navigation.getAngle()));
 	window.draw(rect);
 
 	//Draw target location marker

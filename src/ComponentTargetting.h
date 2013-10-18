@@ -1,5 +1,5 @@
-#ifndef COMPONENT_TARGETTING
-#define COMPONENT_TARGETTING
+#ifndef COMPONENT_TARGETTING_H
+#define COMPONENT_TARGETTING_H
 
 #include "Ship.h"
 
@@ -31,4 +31,4 @@ class ComponentTargetting {
 		double _scanRadius;
 };
 
-#endif //COMPONENT_TARGETTING
+#endif //COMPONENT_TARGETTING_H

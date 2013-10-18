@@ -1,5 +1,5 @@
-#ifndef COMPONENT_HEALTH
-#define COMPONENT_HEALTH
+#ifndef COMPONENT_HEALTH_H
+#define COMPONENT_HEALTH_H
 
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
@@ -37,4 +37,4 @@ class ComponentHealth {
 		sf::Vector2f _size;
 };
 
-#endif //COMPONENT_HEALTH
+#endif //COMPONENT_HEALTH_H

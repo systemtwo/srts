@@ -7,6 +7,7 @@
 
 #include "Ship.h"
 #include "MouseInput.h"
+#include "World.h"
 
 class Game {
 	public:
@@ -19,8 +20,8 @@ class Game {
 		sf::Clock _clock;
 
 		std::vector<sf::Vector2f> _selectPoints;
-		std::vector<Ship*> _playerShips;
 		std::vector<Ship*> _selectedShips;
+		World _world;
 		MouseInput _inputDevice;
 		bool _running;
 		bool _isSelecting;
