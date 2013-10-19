@@ -1,6 +1,8 @@
 #ifndef COMPONENT_TARGETTING_H
 #define COMPONENT_TARGETTING_H
 
+#include <vector>
+
 #include "Ship.h"
 
 //Finds (or user sets) a target that it attempts to follow
@@ -19,7 +21,7 @@ class ComponentTargetting {
 		double getScanRadius() { return _scanRadius; }
 
 
-		void update(double dt) { }
+		void update(double dt, std::vector<Ship*> ships) { }
 
 	
 	private: 

@@ -25,7 +25,7 @@ class DroneShip : public Ship {
 		void setMoveLocation(double x, double y);
 
 	private:
-		ComponentNavigation _navigation;
+		ComponentNavigation* _navigation;
 		ComponentHealth _health;
 
 		bool _selected;
