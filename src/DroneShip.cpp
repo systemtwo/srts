@@ -18,8 +18,39 @@ DroneShip::DroneShip(double x, double y, int team)
 
 void DroneShip::update(double dt, World* world) {
 	_navigation->update(dt);
-	if (_navigation->atTargetLocation()) {
-		_targetting.scan(world->getEnemyShips(_team));
+	//Should be:
+	//1) If move command is given discard any targetting and do not scan
+	//2) If not moving + no move command, target an enemy
+	//3) If we already have a target, keep following it unless 1)
+	
+	std::cout << "This is ship of team [" << _team << "]: ";
+	//Move this into a switch() {case}?
+	if (_state == MOVING && _navigation->atTargetLocation()) {
+		//Ship arrived where player directed, so begin scanning to attack
+		_state = SCANNING;
+		_targetting.setOrigin(_navigation->getPosition());
+	}
+
+	if (_state == SCANNING) {
+		if (_targetting.getTargetShip() == NULL) {
+			//No Ship targetted
+			std::cout << "No ship targetted...";
+			_targetting.scan(world->getEnemyShips(_team));
+			std::cout << world->getEnemyShips(_team).size() << "ships found" << std::endl;
+
+		} else if (world->isShipDead(_targetting.getTargetShip())) {
+			//Targetted ship is dead / does not exist
+			_targetting.scan(world->getEnemyShips(_team));
+			std::cout << "Ship is dead..." << std::endl;
+		} else {
+			//Ship has been found
+			_state = ATTACKING;
+		}
+	}
+
+	if (_state == ATTACKING) {
+		_navigation->setTarget(_targetting.getTargetShip()->getPosition());
+		std::cout << "Attacking! " << std::endl;
 	}
 }
 
@@ -77,6 +108,8 @@ void DroneShip::setSelected(bool selected) {
 	_selected = selected;
 }
 
+//Controller MUST call this! (AI or Player)
 void DroneShip::setMoveLocation(double x, double y) {
 	_navigation->setTarget(x, y);
+	_state = MOVING;
 }

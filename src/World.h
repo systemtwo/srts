@@ -16,6 +16,8 @@ class World {
 
 		void addShip(Ship* ship);
 		void addBullet(Bullet* bullet);
+
+		bool isShipDead(Ship* ship);
 	
 	private:
 		std::vector<Ship*> _ships;

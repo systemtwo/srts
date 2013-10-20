@@ -12,6 +12,8 @@
 #include "World.h"
 
 class DroneShip : public Ship {
+	enum State { MOVING, SCANNING, ATTACKING };
+
 	public:
 		DroneShip(double x, double y, int team);
 
@@ -32,9 +34,11 @@ class DroneShip : public Ship {
 
 		bool _selected;
 		int _team;
+		State _state;
 
 		const double SPEED = 100.0;
 		const double TURNING_SPEED = 3.14;
+
 };
 
 #endif //DRONE_SHIP_H

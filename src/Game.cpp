@@ -19,7 +19,7 @@ Game::Game()
 	//_playerShips.push_back(new DroneShip(200,100,1));
 	//_playerShips.push_back(new DroneShip(400,150,1));
 	
-	_world.addShip(new DroneShip(200, 100, 1));
+	//_world.addShip(new DroneShip(200, 100, 1));
 	_world.addShip(new DroneShip(400, 150, 1));
 	_world.addShip(new DroneShip(400, 350, 2));
 
@@ -65,7 +65,8 @@ void Game::update() {
 		if (_isSelecting) {
 			//Was just selecting
 			_selectedShips.clear();
-			for (auto ship : _allShips) {
+			auto _friendlyShips = _world.getTeamShips(1);
+			for (auto ship : _friendlyShips) {
 				if (GeomUtil::pointInPolygon(_selectPoints, ship->getPosition().x, ship->getPosition().y)) {
 					std::cout << "Ship " << ship->getName() << " selected." << std::endl;
 					ship->setSelected(true);

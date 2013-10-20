@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "World.h"
 
 World::World() {
@@ -32,3 +34,11 @@ void World::addShip(Ship* ship) {
 void World::addBullet(Bullet* bullet) {
 	_bullets.push_back(bullet);
 }
+
+bool World::isShipDead(Ship* ship) {
+	if (std::find(_ships.begin(), _ships.end(), ship) != _ships.end())
+		return false;
+	else
+		return true;
+}
+

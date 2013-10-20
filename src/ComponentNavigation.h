@@ -22,6 +22,10 @@ class ComponentNavigation {
 			_atTargetLocation = false;
 	       	}
 
+		void setTarget(sf::Vector2f location) {
+			setTarget(location.x, location.y);
+		}
+
 		void setPosition(double x, double y) { _x = x; _y = y; }
 		void setAngle(double radians) { _angle = radians; } 
 		
