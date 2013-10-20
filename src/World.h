@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "Ship.h"
-#include "Bullet.h"
+#include "Projectile.h"
 
 class World {
 	public:
@@ -12,16 +12,16 @@ class World {
 		std::vector<Ship*> getTeamShips(int team);
 		std::vector<Ship*> getEnemyShips(int myTeam);
 		std::vector<Ship*> getAllShips();
-		std::vector<Bullet*> getBullets();
+		std::vector<Projectile*> getProjectiles();
 
 		void addShip(Ship* ship);
-		void addBullet(Bullet* bullet);
+		void addProjectile(Projectile* projectile);
 
 		bool isShipDead(Ship* ship);
 	
 	private:
 		std::vector<Ship*> _ships;
-		std::vector<Bullet*> _bullets;
+		std::vector<Projectile*> _projectiles;
 };
 
 

@@ -31,8 +31,8 @@ void World::addShip(Ship* ship) {
 	_ships.push_back(ship);
 }
 
-void World::addBullet(Bullet* bullet) {
-	_bullets.push_back(bullet);
+void World::addProjectile(Projectile* projectile) {
+	_projectiles.push_back(projectile);
 }
 
 bool World::isShipDead(Ship* ship) {
