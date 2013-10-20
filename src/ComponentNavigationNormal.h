@@ -26,10 +26,12 @@ class ComponentNavigationNormal : public ComponentNavigation {
 
 			//We don't need the ship to be pixel perfect at this spot
 			bool arrivedAtTarget;
-			if (distanceToTarget < 5.0)
+			if (distanceToTarget < 5.0) {
 				arrivedAtTarget = true;
-			else
+				_atTargetLocation = true;
+			} else {
 				arrivedAtTarget = false;
+			}
 
 
 			double currSpeed = _speed;

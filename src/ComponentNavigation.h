@@ -16,7 +16,12 @@ class ComponentNavigation {
 
 		virtual void update(double dt) = 0;
 
-		void setTarget(double x, double y) { _targetX = x; _targetY = y; }
+		void setTarget(double x, double y) { 
+			_targetX = x; 
+			_targetY = y;
+			_atTargetLocation = false;
+	       	}
+
 		void setPosition(double x, double y) { _x = x; _y = y; }
 		void setAngle(double radians) { _angle = radians; } 
 		
@@ -24,6 +29,7 @@ class ComponentNavigation {
 		sf::Vector2f getTarget() { return sf::Vector2f(_targetX, _targetY); }
 		sf::Vector2f getPosition() { return sf::Vector2f(_x, _y); }
 		double getAngle() { return _angle; }
+		bool atTargetLocation() { return _atTargetLocation; };
 
 	protected:
 		double _speed;
@@ -33,6 +39,8 @@ class ComponentNavigation {
 		double _targetY;
 		double _x;
 		double _y;
+
+		bool _atTargetLocation;
 
 };
 

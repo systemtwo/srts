@@ -9,6 +9,7 @@
 DroneShip::DroneShip(double x, double y, int team) 
 	: _health(100),
 	  _navigation(new ComponentNavigationNormal(x, y, 100.0, PI)),
+	  _targetting(x, y, 100),
 	  _team(team) {
 	
 	_health.setSize(sf::Vector2f(20, 5));
@@ -17,15 +18,28 @@ DroneShip::DroneShip(double x, double y, int team)
 
 void DroneShip::update(double dt, World* world) {
 	_navigation->update(dt);
+	if (_navigation->atTargetLocation()) {
+		_targetting.scan(world->getEnemyShips(_team));
+	}
 }
 
 void DroneShip::draw(sf::RenderWindow& window) {
 	//Draw Ship
 	sf::RectangleShape rect;
-	if (!_selected)
-		rect.setFillColor(sf::Color::Red);
-	else 
-		rect.setFillColor(sf::Color::Yellow);
+	switch (_team) {
+		case 1:
+			if (!_selected)
+				rect.setFillColor(sf::Color::Red);
+			else 
+				rect.setFillColor(sf::Color::Yellow);
+			break;
+		case 2:
+			rect.setFillColor(sf::Color::Magenta);
+			break;
+		default:
+			break;
+
+	}
 
 	rect.setPosition(_navigation->getPosition());
 	rect.setSize(sf::Vector2f(10, 10));

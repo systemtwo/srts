@@ -21,6 +21,7 @@ Game::Game()
 	
 	_world.addShip(new DroneShip(200, 100, 1));
 	_world.addShip(new DroneShip(400, 150, 1));
+	_world.addShip(new DroneShip(400, 350, 2));
 
 #ifdef WITH_TESTS
 	std::vector<sf::Vector2f> poly;

@@ -8,6 +8,7 @@
 #include "Ship.h"
 #include "ComponentHealth.h"
 #include "ComponentNavigation.h"
+#include "ComponentTargetting.h"
 #include "World.h"
 
 class DroneShip : public Ship {
@@ -26,6 +27,7 @@ class DroneShip : public Ship {
 
 	private:
 		ComponentNavigation* _navigation;
+		ComponentTargetting _targetting;
 		ComponentHealth _health;
 
 		bool _selected;

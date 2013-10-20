@@ -10,6 +10,7 @@ class World {
 	public:
 		World();
 		std::vector<Ship*> getTeamShips(int team);
+		std::vector<Ship*> getEnemyShips(int myTeam);
 		std::vector<Ship*> getAllShips();
 		std::vector<Bullet*> getBullets();
 
