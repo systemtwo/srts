@@ -27,6 +27,10 @@ std::vector<Ship*> World::getEnemyShips(int myTeam) {
 	return marked;
 }
 
+std::vector<Projectile*> World::getAllProjectiles() {
+	return _projectiles;
+}
+
 void World::addShip(Ship* ship) {
 	_ships.push_back(ship);
 }

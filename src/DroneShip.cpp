@@ -5,11 +5,13 @@
 #include "DroneShip.h"
 #include "GeomUtil.h"
 #include "ComponentNavigationNormal.h"
+#include "ComponentWeaponLaser.h"
 
 DroneShip::DroneShip(double x, double y, int team) 
 	: _health(100),
 	  _navigation(new ComponentNavigationNormal(x, y, 100.0, PI)),
 	  _targetting(x, y, 100),
+	  _weapon(new ComponentWeaponLaser(x, y, 0, team)),
 	  _team(team) {
 	
 	_health.setSize(sf::Vector2f(20, 5));
@@ -23,7 +25,6 @@ void DroneShip::update(double dt, World* world) {
 	//2) If not moving + no move command, target an enemy
 	//3) If we already have a target, keep following it unless 1)
 	
-	std::cout << "This is ship of team [" << _team << "]: ";
 	//Move this into a switch() {case}?
 	if (_state == MOVING && _navigation->atTargetLocation()) {
 		//Ship arrived where player directed, so begin scanning to attack
@@ -34,14 +35,10 @@ void DroneShip::update(double dt, World* world) {
 	if (_state == SCANNING) {
 		if (_targetting.getTargetShip() == NULL) {
 			//No Ship targetted
-			std::cout << "No ship targetted...";
 			_targetting.scan(world->getEnemyShips(_team));
-			std::cout << world->getEnemyShips(_team).size() << "ships found" << std::endl;
-
 		} else if (world->isShipDead(_targetting.getTargetShip())) {
 			//Targetted ship is dead / does not exist
 			_targetting.scan(world->getEnemyShips(_team));
-			std::cout << "Ship is dead..." << std::endl;
 		} else {
 			//Ship has been found
 			_state = ATTACKING;
@@ -50,7 +47,12 @@ void DroneShip::update(double dt, World* world) {
 
 	if (_state == ATTACKING) {
 		_navigation->setTarget(_targetting.getTargetShip()->getPosition());
-		std::cout << "Attacking! " << std::endl;
+		_targetting.setOrigin(_navigation->getPosition());
+		_weapon->setOrigin(_navigation->getPosition());
+		_weapon->setFacingAngle(_navigation->getAngle());
+
+		if (_weapon->inFiringArc(_targetting.getTargetAngle()))
+			_weapon->fire(world);
 	}
 }
 

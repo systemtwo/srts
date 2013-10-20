@@ -3,11 +3,17 @@
 
 #include <cmath>
 
+#include "World.h"
+
 class ComponentWeapon {
 	public:
-		ComponentWeapon(double firingArc, double range) 
-			: _firingArc(fireArc),
-			  _range(range) {
+		ComponentWeapon(double firingArc, double range, double x, double y, double facingAngle, int team)
+			: _firingArc(firingArc),
+			  _range(range), 
+       			  _team(team),
+			  _x(x),
+			  _y(y),
+			  _facingAngle(facingAngle){
 		}
 
 		bool inFiringArc(double angle) {
@@ -20,20 +26,26 @@ class ComponentWeapon {
 		}
 
 		void setFacingAngle(double facingAngle) { _facingAngle = facingAngle; }
-		void setFiringArc(double firingArc) { _firingArc = fireArc; }
+		void setFiringArc(double firingArc) { _firingArc = firingArc; }
 		void setRange(double range) { _range = range; }
+		void setOrigin(double x, double y) { _x = x; _y = y; }
+		void setOrigin(sf::Vector2f loc) { setOrigin(loc.x, loc.y); }
 
 		double getFacingAngle() { return _facingAngle; }
 		double getFiringArc() { return _firingArc; }
 		double getRange() { return _range; }
+		sf::Vector2f getOrigin() { return sf::Vector2f(_x, _y); }
 
-		void fire();
+		virtual void fire(World* world) = 0;
 		
 
 	protected:
 		double _firingArc;
 		double _facingAngle;
 		double _range;
+		double _x;
+		double _y;
+		int _team;
 
 };
 

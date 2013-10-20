@@ -5,25 +5,23 @@
 
 class Projectile {
 	public:
-		Projectile(double x, double y, double angle, double speed, int team) 
+		Projectile(double x, double y, double angle, int team) 
 			: _x(x),
 			  _y(y),
-			  _speed(speed),
 			  _angle(angle),
 			  _team(team) {
 		}
 
 		sf::Vector2f getPosition() { return sf::Vector2f(_x, _y); }
-		sf::Vector2f getSize();
-		int getTeam();
+		sf::Vector2f getSize() { return sf::Vector2f(0,0); }
+		int getTeam() { return _team; }
 
-		void update(double dt);
-		void draw(sf::RenderWindow& window);
+		virtual void update(double dt) = 0;
+		virtual void draw(sf::RenderWindow& window) = 0;
 
-	private:
+	protected:
 		double _x;
 		double _y;
-		double _speed;
 		double _angle;
 		double _team;
 };

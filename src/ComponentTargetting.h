@@ -18,16 +18,18 @@ class ComponentTargetting {
        			  _scanRadius(scanRadius),
        			  _targetShip(NULL) { }
 
-		void setTarget(double x, double y) { _targetX = x; _targetY = y; }
 		void setOrigin(double x, double y) { _x = x; _y = y; }
 		void setOrigin(sf::Vector2f loc) { setOrigin(loc.x, loc.y); }
 		void setScanRadius(double rad) { _scanRadius = rad; }
 
-		sf::Vector2f getTargetPosition() { return sf::Vector2f(_targetX, _targetX); }
+		//sf::Vector2f getTargetPosition() { return sf::Vector2f(_targetX, _targetX); }
+		sf::Vector2f getTargetPosition() { return _targetShip->getPosition(); }
 		Ship* getTargetShip() { return _targetShip; }
 		sf::Vector2f getOrigin() { return sf::Vector2f(_x, _y); }
 		double getScanRadius() { return _scanRadius; }
 		double getTargetAngle() { 
+			//Make sure to call setTarget every time we want info on the enemy ship
+			setTarget(_targetShip->getPosition());
 			double ang = atan2 (_targetY - _y, _targetX - _x);
 			return (ang < 0)? ang + (2.0 * PI) : ang;
 		}
@@ -49,9 +51,6 @@ class ComponentTargetting {
 					_targetX = ship->getPosition().x;
 					_targetY = ship->getPosition().y;
 				}
-				std::cout << "Distance of enemy ship: " << hypot(diffX, diffY) << std::endl;
-				std::cout << "DiffX: " << diffX << std::endl;
-				std::cout << "DiffY: " << ship->getPosition().y << "-" << _y << std::endl;
 			}
 	       	}
 
@@ -63,6 +62,9 @@ class ComponentTargetting {
 		double _x; //Origin
 		double _y;
 		double _scanRadius;
+
+		void setTarget(double x, double y) { _targetX = x; _targetY = y; }
+		void setTarget(sf::Vector2f loc) { setTarget(loc.x, loc.y); }
 };
 
 #endif //COMPONENT_TARGETTING_H

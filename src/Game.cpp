@@ -52,9 +52,15 @@ void Game::run() {
 void Game::update() {
 	auto dt = (double)_clock.restart().asMilliseconds() / 1000.0;
 
+	//TODO - Refactor _allShips to allShips (its not an instance/member var)
 	auto _allShips = _world.getAllShips();
 	for (auto ship : _allShips) {
 		ship->update(dt, &_world);
+	}
+
+	auto allProjectiles = _world.getAllProjectiles();
+	for (auto projectile : allProjectiles) {
+		projectile->update(dt);
 	}
 
 	if (_inputDevice.isSelecting()) {
@@ -125,9 +131,14 @@ void Game::draw() {
 	}
 
 
-	auto _allShips = _world.getAllShips();
-	for (unsigned int i = 0; i < _allShips.size(); i++) {
-		_allShips[i]->draw(_window);
+	auto allShips = _world.getAllShips();
+	for (unsigned int i = 0; i < allShips.size(); i++) {
+		allShips[i]->draw(_window);
+	}
+
+	auto allProjectiles = _world.getAllProjectiles();
+	for (auto projectile : allProjectiles) {
+		projectile->draw(_window);
 	}
 
 	_window.display();
