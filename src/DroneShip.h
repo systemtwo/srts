@@ -10,6 +10,7 @@
 #include "ComponentNavigation.h"
 #include "ComponentTargetting.h"
 #include "ComponentWeapon.h"
+#include "ComponentCollision.h"
 #include "World.h"
 
 class DroneShip : public Ship {
@@ -33,6 +34,7 @@ class DroneShip : public Ship {
 		ComponentTargetting _targetting;
 		ComponentHealth _health;
 		ComponentWeapon* _weapon;
+		ComponentCollision _collision;
 
 		bool _selected;
 		int _team;

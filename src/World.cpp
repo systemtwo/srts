@@ -33,6 +33,16 @@ std::vector<Projectile*> World::getAllProjectiles() {
 	return _projectiles;
 }
 
+std::vector<Projectile*> World::getEnemyProjectiles(int myTeam) {
+	std::vector<Projectile*> marked;
+	for (auto p : _projectiles) {
+		if (p->getTeam() != myTeam)
+			marked.push_back(p);
+	}
+	return marked;
+}
+
+
 void World::addShip(Ship* ship) {
 	_ships.push_back(ship);
 }
@@ -59,9 +69,27 @@ void World::cleanProjectiles() {
 		if (ploc.x < 0 ||
 		    ploc.x > _arenaWidth ||
 		    ploc.y < 0 ||
-		    ploc.y > _arenaHeight) {
+		    ploc.y > _arenaHeight ||
+		    _projectiles[i]->isDead()) {
 			delete _projectiles[i];
 			_projectiles.erase(_projectiles.begin() + i);
+		} else {
+			i++;
+		}
+	}
+}
+
+void World::cleanShips() {
+	//Remove bullets that are off the field
+	//See: http://stackoverflow.com/questions/8597240/how-to-delete-an-element-from-a-vector-while-looping-over-it/8597330#8597330
+	//See: http://stackoverflow.com/a/8628963
+	
+	std::vector<Ship*>::size_type i = 0;
+	while (i < _ships.size()) {
+		auto ploc = _ships[i]->getPosition();
+		if (_ships[i]->isDead()) {
+			delete _ships[i];
+			_ships.erase(_ships.begin() + i);
 		} else {
 			i++;
 		}

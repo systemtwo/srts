@@ -66,23 +66,6 @@ void Game::update() {
 	_world.cleanProjectiles();
 	auto allProjectiles = _world.getAllProjectiles();
 
-	//Clean up bullets that go off screen
-	//TODO - Put this in World class? 
-	//See: http://stackoverflow.com/questions/8597240/how-to-delete-an-element-from-a-vector-while-looping-over-it/8597330#8597330
-	//See: http://stackoverflow.com/a/8628963
-	//for (auto iter = allProjectiles.end(); iter != allProjectiles.begin();) {
-		//auto ploc = projectile->getPosition();
-		//if (ploc.x < 0 ||
-		    //ploc.x > FIELD_WIDTH ||
-		    //ploc.y < 0 ||
-		    //ploc.y > FIELD_HEIGHT) {
-			//delete projectile;
-			//
-		//} else {
-			//iter++;
-		//}
-	//}
-
 	//Update all projectiles
 	for (auto projectile : allProjectiles) {
 		projectile->update(dt);

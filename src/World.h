@@ -13,6 +13,7 @@ class World {
 		std::vector<Ship*> getEnemyShips(int myTeam);
 		std::vector<Ship*> getAllShips();
 		std::vector<Projectile*> getAllProjectiles();
+		std::vector<Projectile*> getEnemyProjectiles(int myTeam);
 
 		void addShip(Ship* ship);
 		void addProjectile(Projectile* projectile);

@@ -8,13 +8,16 @@
 
 class ComponentWeapon {
 	public:
-		ComponentWeapon(double firingArc, double range, double x, double y, double facingAngle, int team)
+		ComponentWeapon(double firingArc, double range, int burst, double cooldown, 
+				double x, double y, double facingAngle, int team)
 			: _firingArc(firingArc),
 			  _range(range), 
        			  _team(team),
+       			  _burst(burst),
+			  _cooldown(cooldown),
 			  _x(x),
 			  _y(y),
-			  _facingAngle(facingAngle){
+			  _facingAngle(facingAngle) {
 		}
 
 		bool inFiringArc(double angle) {
@@ -37,13 +40,15 @@ class ComponentWeapon {
 		double getRange() { return _range; }
 		sf::Vector2f getOrigin() { return sf::Vector2f(_x, _y); }
 
-		virtual void fire(World* world) = 0;
+		virtual void fire(double dt, World* world) = 0;
 		
 
 	protected:
 		double _firingArc;
 		double _facingAngle;
 		double _range;
+		int _burst;
+		double _cooldown;
 		double _x;
 		double _y;
 		int _team;

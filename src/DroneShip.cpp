@@ -12,7 +12,8 @@ DroneShip::DroneShip(double x, double y, int team)
 	  _navigation(new ComponentNavigationNormal(x, y, 100.0, PI)),
 	  _targetting(x, y, 100),
 	  _weapon(new ComponentWeaponLaser(x, y, 0, team)),
-	  _team(team) {
+	  _team(team),
+	  _collision(10, x, y) {
 	
 	_health.setSize(sf::Vector2f(20, 5));
 	
@@ -52,8 +53,16 @@ void DroneShip::update(double dt, World* world) {
 		_weapon->setFacingAngle(_navigation->getAngle());
 
 		if (_weapon->inFiringArc(_targetting.getTargetAngle()))
-			_weapon->fire(world);
+			_weapon->fire(dt, world);
 	}
+
+	//Collision code
+	_collision.setPosition(_navigation->getPosition());
+	_collision.update(world->getEnemyProjectiles(_team));
+	_health.add(_collision.getDamage()*-1.0);
+
+	if (_health.getHealthValue() < 0) 
+		setDead(true);
 }
 
 void DroneShip::draw(sf::RenderWindow& window) {

@@ -25,8 +25,9 @@ class ComponentHealth {
 
 		void draw(sf::RenderWindow& window, double x, double y) {
 			sf::RectangleShape r;
+			sf::Vector2f modSize(_size.x * getHealthPercent()/100.0, _size.y);
 			r.setFillColor(_color);
-			r.setSize(_size);
+			r.setSize(modSize);
 			r.setPosition(x, y);
 			window.draw(r);
 		}

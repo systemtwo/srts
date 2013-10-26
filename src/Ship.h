@@ -20,6 +20,12 @@ class Ship {
 		virtual void setMoveLocation(double x, double y) {};
 		*/
 
+		Ship() 
+			: _dead(false) {
+		}
+
+		void setDead(bool dead) { _dead = dead; }
+		bool isDead() { return _dead; }
 
 		virtual void update (double dt, World* world) = 0;
 		virtual void draw(sf::RenderWindow& window) = 0;
@@ -29,6 +35,10 @@ class Ship {
 
 		virtual void setSelected(bool selected) = 0;
 		virtual void setMoveLocation(double x, double y) = 0;
+
+
+	private:
+		bool _dead;
 };
 
 #endif //SHIP_H
