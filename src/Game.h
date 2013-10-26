@@ -26,6 +26,7 @@ class Game {
 		bool _running;
 		bool _isSelecting;
 
+
 		void pollForWindowEvent();
 		void update();
 		void draw();

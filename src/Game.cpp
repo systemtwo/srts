@@ -1,4 +1,8 @@
+#define ARENA_WIDTH 1600
+#define ARENA_HEIGHT 1200
+
 #include <iostream>
+#include <algorithm>
 
 #include "Game.h"
 #include "MouseInput.h"
@@ -10,7 +14,7 @@ Game::Game()
 	  _inputDevice(_window),
 	  _running(true),
 	  _isSelecting(false),
-	  _world() {
+	  _world(ARENA_WIDTH, ARENA_HEIGHT) {
 	
 	_window.setFramerateLimit(60);
 
@@ -52,6 +56,7 @@ void Game::run() {
 void Game::update() {
 	auto dt = (double)_clock.restart().asMilliseconds() / 1000.0;
 
+
 	//TODO - Refactor _allShips to allShips (its not an instance/member var)
 	auto _allShips = _world.getAllShips();
 	for (auto ship : _allShips) {
@@ -59,6 +64,25 @@ void Game::update() {
 	}
 
 	auto allProjectiles = _world.getAllProjectiles();
+
+	//Clean up bullets that go off screen
+	//TODO - Put this in World class? 
+	//See: http://stackoverflow.com/questions/8597240/how-to-delete-an-element-from-a-vector-while-looping-over-it/8597330#8597330
+	//See: http://stackoverflow.com/a/8628963
+	//for (auto iter = allProjectiles.end(); iter != allProjectiles.begin();) {
+		//auto ploc = projectile->getPosition();
+		//if (ploc.x < 0 ||
+		    //ploc.x > FIELD_WIDTH ||
+		    //ploc.y < 0 ||
+		    //ploc.y > FIELD_HEIGHT) {
+			//delete projectile;
+			//
+		//} else {
+			//iter++;
+		//}
+	//}
+
+	//Update all projectiles
 	for (auto projectile : allProjectiles) {
 		projectile->update(dt);
 	}

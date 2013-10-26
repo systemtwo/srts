@@ -8,7 +8,7 @@
 
 class World {
 	public:
-		World();
+		World(double arenaWidth, double arenaHeight);
 		std::vector<Ship*> getTeamShips(int team);
 		std::vector<Ship*> getEnemyShips(int myTeam);
 		std::vector<Ship*> getAllShips();
@@ -18,10 +18,15 @@ class World {
 		void addProjectile(Projectile* projectile);
 
 		bool isShipDead(Ship* ship);
+
+		void cleanProjectiles();
 	
 	private:
 		std::vector<Ship*> _ships;
 		std::vector<Projectile*> _projectiles;
+
+		double _arenaWidth;
+		double _arenaHeight;
 };
 
 

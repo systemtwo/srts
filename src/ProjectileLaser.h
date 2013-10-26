@@ -28,7 +28,7 @@ class ProjectileLaser : public Projectile {
 		}
 
 	private:
-		const double SPEED = 250.0;
+		const double SPEED = 450.0;
 };
 
 #endif //PROJECTILE_LASER_H

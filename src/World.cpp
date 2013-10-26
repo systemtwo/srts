@@ -2,7 +2,9 @@
 
 #include "World.h"
 
-World::World() {
+World::World(double arenaWidth, double arenaHeight) 
+	: _arenaWidth(arenaWidth),
+	  _arenaHeight(arenaHeight) {
 }
 
 std::vector<Ship*> World::getAllShips() {
@@ -46,3 +48,22 @@ bool World::isShipDead(Ship* ship) {
 		return true;
 }
 
+void World::cleanProjectiles() {
+	//Remove bullets that are off the field
+	//See: http://stackoverflow.com/questions/8597240/how-to-delete-an-element-from-a-vector-while-looping-over-it/8597330#8597330
+	//See: http://stackoverflow.com/a/8628963
+	
+	std::vector<Projectile*>::size_type i = 0;
+	while (i < _projectiles.size()) {
+		auto ploc = _projectiles[i]->getPosition();
+		if (ploc.x < 0 ||
+		    ploc.x > _arenaWidth ||
+		    ploc.y < 0 ||
+		    ploc.y > _arenaHeight) {
+			delete _projectiles[i];
+			_projectiles.erase(_projectiles.begin() + i);
+		} else {
+			i++;
+		}
+	}
+}

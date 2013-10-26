@@ -4,6 +4,7 @@
 #include <cmath>
 
 #include "World.h"
+#include "GeomUtil.h"
 
 class ComponentWeapon {
 	public:
@@ -18,7 +19,7 @@ class ComponentWeapon {
 
 		bool inFiringArc(double angle) {
 			double diffAngle = fmax(_facingAngle, angle) - fmin(_facingAngle, angle);
-			if (diffAngle < (_firingArc/2.0)) 
+			if (diffAngle < (_firingArc/2.0) || diffAngle > ((2 * PI) - _firingArc))
 				return true;
 			else 
 				return false;
