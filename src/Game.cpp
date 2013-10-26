@@ -63,6 +63,7 @@ void Game::update() {
 		ship->update(dt, &_world);
 	}
 
+	_world.cleanProjectiles();
 	auto allProjectiles = _world.getAllProjectiles();
 
 	//Clean up bullets that go off screen
