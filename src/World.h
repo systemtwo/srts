@@ -21,6 +21,7 @@ class World {
 		bool isShipDead(Ship* ship);
 
 		void cleanProjectiles();
+		void cleanShips();
 	
 	private:
 		std::vector<Ship*> _ships;

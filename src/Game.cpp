@@ -56,6 +56,8 @@ void Game::run() {
 void Game::update() {
 	auto dt = (double)_clock.restart().asMilliseconds() / 1000.0;
 
+	_world.cleanProjectiles();
+	_world.cleanShips();
 
 	//TODO - Refactor _allShips to allShips (its not an instance/member var)
 	auto _allShips = _world.getAllShips();
@@ -63,7 +65,6 @@ void Game::update() {
 		ship->update(dt, &_world);
 	}
 
-	_world.cleanProjectiles();
 	auto allProjectiles = _world.getAllProjectiles();
 
 	//Update all projectiles
@@ -92,6 +93,17 @@ void Game::update() {
 		}
 		_selectPoints.clear();
 		_isSelecting = false;
+	}
+
+	//Remove dead ships from selection
+	std::vector<Ship*>::size_type i = 0;
+	while (i < _selectedShips.size()) {
+		auto ship = _selectedShips[i];
+		if (_world.isShipDead(ship)) {
+			_selectedShips.erase(_selectedShips.begin() + i);
+		} else {
+			i++;
+		}
 	}
 
 	if (_inputDevice.isMoving()) {

@@ -47,13 +47,19 @@ void DroneShip::update(double dt, World* world) {
 	}
 
 	if (_state == ATTACKING) {
-		_navigation->setTarget(_targetting.getTargetShip()->getPosition());
-		_targetting.setOrigin(_navigation->getPosition());
-		_weapon->setOrigin(_navigation->getPosition());
-		_weapon->setFacingAngle(_navigation->getAngle());
+		if (world->isShipDead(_targetting.getTargetShip())) {
 
-		if (_weapon->inFiringArc(_targetting.getTargetAngle()))
-			_weapon->fire(dt, world);
+			std::cout << "Ship is dead" << std::endl;
+			_state = SCANNING;
+		} else {
+			_navigation->setTarget(_targetting.getTargetShip()->getPosition());
+			_targetting.setOrigin(_navigation->getPosition());
+			_weapon->setOrigin(_navigation->getPosition());
+			_weapon->setFacingAngle(_navigation->getAngle());
+
+			if (_weapon->inFiringArc(_targetting.getTargetAngle()))
+				_weapon->fire(dt, world);
+		}
 	}
 
 	//Collision code
@@ -61,7 +67,7 @@ void DroneShip::update(double dt, World* world) {
 	_collision.update(world->getEnemyProjectiles(_team));
 	_health.add(_collision.getDamage()*-1.0);
 
-	if (_health.getHealthValue() < 0) 
+	if (_health.getHealthValue() <= 0) 
 		setDead(true);
 }
 

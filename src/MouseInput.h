@@ -12,6 +12,9 @@ class MouseInput : public InputDevice {
 			: _window(window) {
 		}
 
+		bool isAction() override {
+			return sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Space);
+		}
 
 		bool isSelecting() override {
 			return sf::Mouse::isButtonPressed(sf::Mouse::Left);
