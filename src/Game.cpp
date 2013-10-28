@@ -14,7 +14,8 @@ Game::Game()
 	  _inputDevice(_window),
 	  _running(true),
 	  _isSelecting(false),
-	  _world(ARENA_WIDTH, ARENA_HEIGHT) {
+	  _world(ARENA_WIDTH, ARENA_HEIGHT),
+	  _camera(_window, 0, 0) {
 	
 	_window.setFramerateLimit(60);
 
@@ -56,6 +57,13 @@ void Game::run() {
 void Game::update() {
 	auto dt = (double)_clock.restart().asMilliseconds() / 1000.0;
 
+	//Camera testing
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
+		_camera.move(dt*20, 0);
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
+		_camera.move(0, dt*20);
+	_camera.update();
+
 	_world.cleanProjectiles();
 	_world.cleanShips();
 
@@ -74,7 +82,7 @@ void Game::update() {
 
 	if (_inputDevice.isSelecting()) {
 		//Define selection vertices
-		_selectPoints.push_back(sf::Vector2f(_inputDevice.getX(), _inputDevice.getY()));
+		_selectPoints.push_back(sf::Vector2f(_inputDevice.getX() + _camera.getPosition().x, _inputDevice.getY() + _camera.getPosition().y));
 		_isSelecting = true;
 	} else {
 		if (_isSelecting) {
@@ -108,7 +116,23 @@ void Game::update() {
 
 	if (_inputDevice.isMoving()) {
 		if (_selectedShips.size() == 0) {
+			if (_firstMove) {
+				//Make sure we start movement using the coordinates 
+				//of the first move "command"
+				_lastX = _inputDevice.getX();
+				_lastY = _inputDevice.getY();
+				_firstMove = false;
+			}
 			//Move camera
+			double currX = _inputDevice.getX();
+			double currY = _inputDevice.getY();
+
+			_camera.move(_lastX - currX, _lastY - currY);
+			_camera.update();
+
+			_lastX = currX;
+			_lastY = currY;
+
 		} else {
 			//Otherwise move ships
 			//Find center
@@ -126,10 +150,12 @@ void Game::update() {
 				double relX = ship->getPosition().x - cx;
 				double relY = ship->getPosition().y - cy;
 
-				ship->setMoveLocation(_inputDevice.getX() + relX, _inputDevice.getY() + relY);
+				ship->setMoveLocation(_inputDevice.getX() + relX + _camera.getPosition().x, _inputDevice.getY() + relY + _camera.getPosition().y);
 			}
-		}
 
+			//Also reset the camera firstmove
+			_firstMove = true;
+		}
 	}
 }
 
