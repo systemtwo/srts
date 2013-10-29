@@ -35,6 +35,7 @@ class Ship {
 
 		virtual void setSelected(bool selected) = 0;
 		virtual void setMoveLocation(double x, double y) = 0;
+		virtual void setTargetShip(Ship* ship) = 0;
 
 
 	private:

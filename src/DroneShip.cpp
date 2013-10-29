@@ -10,12 +10,15 @@
 DroneShip::DroneShip(double x, double y, int team) 
 	: _health(100),
 	  _navigation(new ComponentNavigationNormal(x, y, 100.0, PI)),
-	  _targetting(x, y, 100),
+	  _targetting(x, y, 200),
 	  _weapon(new ComponentWeaponLaser(x, y, 0, team)),
 	  _team(team),
-	  _collision(10, x, y) {
+	  _collision(10, x, y),
+	  _selected(false){
 	
 	_health.setSize(sf::Vector2f(20, 5));
+	if (team != 1 && team != 2) 
+		std::cout << "Team problem: I'm on team: " << team << std::endl;
 	
 }
 
@@ -31,6 +34,8 @@ void DroneShip::update(double dt, World* world) {
 		//Ship arrived where player directed, so begin scanning to attack
 		_state = SCANNING;
 		_targetting.setOrigin(_navigation->getPosition());
+
+		//Should also scan for ships in front of it so it can fire while moving
 	}
 
 	if (_state == SCANNING) {
@@ -48,7 +53,6 @@ void DroneShip::update(double dt, World* world) {
 
 	if (_state == ATTACKING) {
 		if (world->isShipDead(_targetting.getTargetShip())) {
-
 			std::cout << "Ship is dead" << std::endl;
 			_state = SCANNING;
 		} else {
@@ -85,8 +89,16 @@ void DroneShip::draw(sf::RenderWindow& window) {
 			rect.setFillColor(sf::Color::Magenta);
 			break;
 		default:
+			std::cout << "Panic! No team! (Actually, its: " << _team << ")" << std::endl;
 			break;
 
+	}
+	//Sanity check
+	if (_navigation->getPosition().x < 0 ||
+	    _navigation->getPosition().y < 0 ||
+	    _navigation->getPosition().x > 1600 ||
+	    _navigation->getPosition().y > 1200) {
+		std::cout << "Rect out of bounds: " << _navigation->getPosition().x << ", " << _navigation->getPosition().y << std::endl;
 	}
 
 	rect.setPosition(_navigation->getPosition());
@@ -123,6 +135,10 @@ int DroneShip::getTeam() {
 
 void DroneShip::setSelected(bool selected) {
 	_selected = selected;
+}
+
+void DroneShip::setTargetShip(Ship* ship) {
+	_targetting.setTargetShip(ship);
 }
 
 //Controller MUST call this! (AI or Player)

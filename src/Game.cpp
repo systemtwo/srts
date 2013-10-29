@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include <ctime>
 
 #include "Game.h"
 #include "MouseInput.h"
@@ -18,6 +19,7 @@ Game::Game()
 	  _camera(_window, 0, 0) {
 	
 	_window.setFramerateLimit(60);
+	srand(time(NULL));
 
 
 	//Testing
@@ -25,8 +27,15 @@ Game::Game()
 	//_playerShips.push_back(new DroneShip(400,150,1));
 	
 	//_world.addShip(new DroneShip(200, 100, 1));
-	_world.addShip(new DroneShip(400, 150, 1));
-	_world.addShip(new DroneShip(400, 350, 2));
+	//_world.addShip(new DroneShip(400, 150, 1));
+	//_world.addShip(new DroneShip(400, 350, 2));
+	
+	//_world.addShip(new DroneShip(450, 250, 1));
+	//_world.addShip(new DroneShip(500, 250, 1));
+	//_world.addShip(new DroneShip(550, 250, 1));
+	//_world.addShip(new DroneShip(450, 300, 2));
+	//_world.addShip(new DroneShip(500, 300, 2));
+	//_world.addShip(new DroneShip(550, 300, 2));
 
 #ifdef WITH_TESTS
 	std::vector<sf::Vector2f> poly;
@@ -57,12 +66,16 @@ void Game::run() {
 void Game::update() {
 	auto dt = (double)_clock.restart().asMilliseconds() / 1000.0;
 
-	//Camera testing
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Right))
-		_camera.move(dt*20, 0);
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Down))
-		_camera.move(0, dt*20);
-	_camera.update();
+	if (rand() % 150 == 0) {
+		_world.addShip(new DroneShip(rand()%500, rand()%500, 2));
+		_world.addShip(new DroneShip(rand()%500, rand()%500, 1));
+	} else if (rand() % 150 == 1) {
+	}
+	//} else if (rand() % 150 == 2) {
+		//_world.addShip(new DroneShip(rand()%500, rand()%500, 1));
+	//}
+
+
 
 	_world.cleanProjectiles();
 	_world.cleanShips();
@@ -154,9 +167,28 @@ void Game::update() {
 			}
 
 			//Also reset the camera firstmove
-			_firstMove = true;
 		}
+	} else {
+		_firstMove = true;
 	}
+
+	if (_inputDevice.isAction()) {
+		//if (not on UI)
+		for (auto ship : _allShips) {
+			if (hypot(ship->getPosition().x - _inputDevice.getX(), 
+				  ship->getPosition().y - _inputDevice.getY()) < 20) {
+
+				//Set this ship as target for all selected ships
+				for (auto sship : _selectedShips) {
+					sship->setTargetShip(ship);
+				}
+			}
+		}
+
+
+
+	}
+	
 }
 
 void Game::draw() {
