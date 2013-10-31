@@ -86,7 +86,6 @@ void World::cleanShips() {
 	
 	std::vector<Ship*>::size_type i = 0;
 	while (i < _ships.size()) {
-		auto ploc = _ships[i]->getPosition();
 		if (_ships[i]->isDead()) {
 			delete _ships[i];
 			_ships.erase(_ships.begin() + i);

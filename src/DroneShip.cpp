@@ -14,7 +14,8 @@ DroneShip::DroneShip(double x, double y, int team)
 	  _weapon(new ComponentWeaponLaser(x, y, 0, team)),
 	  _team(team),
 	  _collision(10, x, y),
-	  _selected(false){
+	  _selected(false),
+	  _state(MOVING) {
 	
 	_health.setSize(sf::Vector2f(20, 5));
 	if (team != 1 && team != 2) 
