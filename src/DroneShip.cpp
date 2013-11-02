@@ -10,7 +10,7 @@
 DroneShip::DroneShip(double x, double y, int team) 
 	: _health(100),
 	  _navigation(new ComponentNavigationNormal(x, y, 100.0, PI)),
-	  _targetting(x, y, 200),
+	  _targetting(x, y, 100.0),
 	  _weapon(new ComponentWeaponLaser(x, y, 0, team)),
 	  _team(team),
 	  _collision(10, x, y),
@@ -25,6 +25,10 @@ DroneShip::DroneShip(double x, double y, int team)
 
 void DroneShip::update(double dt, World* world) {
 	_navigation->update(dt);
+
+	_targetting.setOrigin(_navigation->getPosition());
+	_weapon->setOrigin(_navigation->getPosition());
+	_weapon->setFacingAngle(_navigation->getAngle());
 	//Should be:
 	//1) If move command is given discard any targetting and do not scan
 	//2) If not moving + no move command, target an enemy
@@ -36,7 +40,12 @@ void DroneShip::update(double dt, World* world) {
 		_state = SCANNING;
 		_targetting.setOrigin(_navigation->getPosition());
 
+	}
+
+	if (_state == MOVING) {
 		//Should also scan for ships in front of it so it can fire while moving
+		if (_targetting.checkInAngle(world->getEnemyShips(_team), _navigation->getAngle(), _weapon->getFiringArc()))
+			_weapon->fire(dt, world);
 	}
 
 	if (_state == SCANNING) {

@@ -26,9 +26,9 @@ Game::Game()
 	//_playerShips.push_back(new DroneShip(200,100,1));
 	//_playerShips.push_back(new DroneShip(400,150,1));
 	
-	//_world.addShip(new DroneShip(200, 100, 1));
-	//_world.addShip(new DroneShip(400, 150, 1));
-	//_world.addShip(new DroneShip(400, 350, 2));
+	_world.addShip(new DroneShip(200, 100, 1));
+	_world.addShip(new DroneShip(400, 150, 1));
+	_world.addShip(new DroneShip(400, 350, 2));
 	
 	//_world.addShip(new DroneShip(450, 250, 1));
 	//_world.addShip(new DroneShip(500, 250, 1));
@@ -66,11 +66,12 @@ void Game::run() {
 void Game::update() {
 	auto dt = (double)_clock.restart().asMilliseconds() / 1000.0;
 
-	if (rand() % 150 == 0) {
+	/*if (rand() % 150 == 0) {
 		_world.addShip(new DroneShip(rand()%500, rand()%500, 2));
 		_world.addShip(new DroneShip(rand()%500, rand()%500, 1));
 	} else if (rand() % 150 == 1) {
 	}
+	*/
 	//} else if (rand() % 150 == 2) {
 		//_world.addShip(new DroneShip(rand()%500, rand()%500, 1));
 	//}

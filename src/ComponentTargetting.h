@@ -53,8 +53,42 @@ class ComponentTargetting {
 					_targetY = ship->getPosition().y;
 				}
 			}
-	       	}
+		}
 
+		bool checkInAngle(std::vector<Ship*> ships, double angle, double bound) {
+			std::cout << "AngCheck called" << std::endl;
+			//Check to see if there is a ship in the arc
+			//Scan with bounded +/- angle
+			//Select ships within bound radians of angle
+			for (auto ship : ships) {
+				//double ang = atan2 (ship->getPosition().y - _y, ship->getPosition().x - _x);
+				//Using dot product
+
+				//Vector to the ship
+				double x1 = ship->getPosition().x - _x;
+				double y1 = ship->getPosition().y - _y;
+
+				//Vector we are facing
+				double x2 = cos(angle);
+				double y2 = sin(angle);
+
+				//A dot B
+				double dotproduct = (x1 * x2) + (y1 * y2);
+
+				//Find the angle
+				double angDiff = acos(dotproduct/(hypot(x1, y1) * hypot(x2, y2)));
+				std::cout << "AngCheck angDiff: " << angDiff << std::endl;
+
+				if (angDiff < bound) {
+					return true;
+				}
+				
+			}
+			return false;
+		}
+
+
+			  
 	
 	private: 
 		Ship*  _targetShip;
