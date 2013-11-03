@@ -21,9 +21,10 @@ class ProjectileLaser : public Projectile {
 
 		void draw(sf::RenderWindow& window) { 
 			sf::RectangleShape rect;
-			rect.setFillColor(sf::Color::Blue);
-			rect.setSize(sf::Vector2f(3,3));
+			rect.setFillColor(sf::Color::Cyan);
+			rect.setSize(sf::Vector2f(1.5, 8));
 			rect.setPosition(getPosition());
+			rect.setRotation(GeomUtil::radToDeg(_angle + PI/2));
 			window.draw(rect);
 		}
 

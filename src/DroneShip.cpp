@@ -8,16 +8,11 @@
 #include "ComponentWeaponLaser.h"
 
 DroneShip::DroneShip(double x, double y, int team) 
-	: _health(100),
-	  _navigation(new ComponentNavigationNormal(x, y, 100.0, PI)),
-	  _targetting(x, y, 100.0),
-	  _weapon(new ComponentWeaponLaser(x, y, 0, team)),
-	  _team(team),
-	  _collision(10, x, y),
-	  _selected(false),
-	  _state(MOVING) {
+	: Ship("Drone", team, new ComponentNavigationNormal(x, y, 100.0, PI), new ComponentTargetting(x, y, 100.0), 
+	       new ComponentHealth(100), new ComponentWeaponLaser(x, y, 0, team), new ComponentCollision(10, x, y))
+	{
 	
-	_health.setSize(sf::Vector2f(20, 5));
+	_health->setSize(sf::Vector2f(20, 5));
 	if (team != 1 && team != 2) 
 		std::cout << "Team problem: I'm on team: " << team << std::endl;
 	
@@ -26,7 +21,7 @@ DroneShip::DroneShip(double x, double y, int team)
 void DroneShip::update(double dt, World* world) {
 	_navigation->update(dt);
 
-	_targetting.setOrigin(_navigation->getPosition());
+	_targetting->setOrigin(_navigation->getPosition());
 	_weapon->setOrigin(_navigation->getPosition());
 	_weapon->setFacingAngle(_navigation->getAngle());
 	//Should be:
@@ -38,23 +33,23 @@ void DroneShip::update(double dt, World* world) {
 	if (_state == MOVING && _navigation->atTargetLocation()) {
 		//Ship arrived where player directed, so begin scanning to attack
 		_state = SCANNING;
-		_targetting.setOrigin(_navigation->getPosition());
+		_targetting->setOrigin(_navigation->getPosition());
 
 	}
 
 	if (_state == MOVING) {
 		//Should also scan for ships in front of it so it can fire while moving
-		if (_targetting.checkInAngle(world->getEnemyShips(_team), _navigation->getAngle(), _weapon->getFiringArc()))
+		if (_targetting->checkInAngle(world->getEnemyShips(_team), _navigation->getAngle(), _weapon->getFiringArc()))
 			_weapon->fire(dt, world);
 	}
 
 	if (_state == SCANNING) {
-		if (_targetting.getTargetShip() == NULL) {
+		if (_targetting->getTargetShip() == NULL) {
 			//No Ship targetted
-			_targetting.scan(world->getEnemyShips(_team));
-		} else if (world->isShipDead(_targetting.getTargetShip())) {
+			_targetting->scan(world->getEnemyShips(_team));
+		} else if (world->isShipDead(_targetting->getTargetShip())) {
 			//Targetted ship is dead / does not exist
-			_targetting.scan(world->getEnemyShips(_team));
+			_targetting->scan(world->getEnemyShips(_team));
 		} else {
 			//Ship has been found
 			_state = ATTACKING;
@@ -62,26 +57,26 @@ void DroneShip::update(double dt, World* world) {
 	}
 
 	if (_state == ATTACKING) {
-		if (world->isShipDead(_targetting.getTargetShip())) {
+		if (world->isShipDead(_targetting->getTargetShip())) {
 			std::cout << "Ship is dead" << std::endl;
 			_state = SCANNING;
 		} else {
-			_navigation->setTarget(_targetting.getTargetShip()->getPosition());
-			_targetting.setOrigin(_navigation->getPosition());
+			_navigation->setTarget(_targetting->getTargetShip()->getPosition());
+			_targetting->setOrigin(_navigation->getPosition());
 			_weapon->setOrigin(_navigation->getPosition());
 			_weapon->setFacingAngle(_navigation->getAngle());
 
-			if (_weapon->inFiringArc(_targetting.getTargetAngle()))
+			if (_weapon->inFiringArc(_targetting->getTargetAngle()))
 				_weapon->fire(dt, world);
 		}
 	}
 
 	//Collision code
-	_collision.setPosition(_navigation->getPosition());
-	_collision.update(world->getEnemyProjectiles(_team));
-	_health.add(_collision.getDamage()*-1.0);
+	_collision->setPosition(_navigation->getPosition());
+	_collision->update(world->getEnemyProjectiles(_team));
+	_health->add(_collision->getDamage()*-1.0);
 
-	if (_health.getHealthValue() <= 0) 
+	if (_health->getHealthValue() <= 0) 
 		setDead(true);
 }
 
@@ -127,32 +122,6 @@ void DroneShip::draw(sf::RenderWindow& window) {
 	}
 
 	//Draw Healthbar
-	_health.draw(window, _navigation->getPosition().x - 10, _navigation->getPosition().y - 15);
-
+	_health->draw(window, _navigation->getPosition().x - 10, _navigation->getPosition().y - 15);
 }
 
-sf::Vector2f DroneShip::getPosition() {
-	return _navigation->getPosition();
-}
-
-std::string DroneShip::getName() {
-	return std::string("Drone");
-}
-
-int DroneShip::getTeam() {
-	return _team;
-}
-
-void DroneShip::setSelected(bool selected) {
-	_selected = selected;
-}
-
-void DroneShip::setTargetShip(Ship* ship) {
-	_targetting.setTargetShip(ship);
-}
-
-//Controller MUST call this! (AI or Player)
-void DroneShip::setMoveLocation(double x, double y) {
-	_navigation->setTarget(x, y);
-	_state = MOVING;
-}

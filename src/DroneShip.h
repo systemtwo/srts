@@ -14,34 +14,13 @@
 #include "World.h"
 
 class DroneShip : public Ship {
-	enum State { MOVING, SCANNING, ATTACKING };
-
 	public:
 		DroneShip(double x, double y, int team);
 
 		void update(double dt, World* world);
 		void draw(sf::RenderWindow& window);
 		
-		sf::Vector2f getPosition();
-		std::string getName();
-		int getTeam();
-
-		void setSelected(bool selected);
-		void setMoveLocation(double x, double y);
-
-		void setTargetShip(Ship* ship);
-
 	private:
-		ComponentNavigation* _navigation;
-		ComponentTargetting _targetting;
-		ComponentHealth _health;
-		ComponentWeapon* _weapon;
-		ComponentCollision _collision;
-
-		bool _selected;
-		int _team;
-		State _state;
-
 		const double SPEED = 100.0;
 		const double TURNING_SPEED = 3.14;
 

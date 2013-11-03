@@ -56,7 +56,6 @@ class ComponentTargetting {
 		}
 
 		bool checkInAngle(std::vector<Ship*> ships, double angle, double bound) {
-			std::cout << "AngCheck called" << std::endl;
 			//Check to see if there is a ship in the arc
 			//Scan with bounded +/- angle
 			//Select ships within bound radians of angle
@@ -77,7 +76,6 @@ class ComponentTargetting {
 
 				//Find the angle
 				double angDiff = acos(dotproduct/(hypot(x1, y1) * hypot(x2, y2)));
-				std::cout << "AngCheck angDiff: " << angDiff << std::endl;
 
 				if (angDiff < bound) {
 					return true;
