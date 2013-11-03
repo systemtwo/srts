@@ -36,8 +36,8 @@ class ComponentNavigationNormal : public ComponentNavigation {
 
 			double currSpeed = _speed;
 			//Slow down as we get closer
-			if (distanceToTarget < 50.0)
-				currSpeed /= 2.0;
+			//if (distanceToTarget < 50.0)
+				//currSpeed *= distanceToTarget/100;
 			
 			if (!arrivedAtTarget) {
 				//Cross product method (Calculate which way to turn)

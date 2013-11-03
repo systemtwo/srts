@@ -9,6 +9,7 @@
 #include "MouseInput.h"
 #include "GeomUtil.h"
 #include "DroneShip.h"
+#include "ShipBomber.h"
 
 Game::Game() 
 	: _window(sf::VideoMode(800,600), "SimpleRTS"),
@@ -27,8 +28,10 @@ Game::Game()
 	//_playerShips.push_back(new DroneShip(400,150,1));
 	
 	_world.addShip(new DroneShip(200, 100, 1));
+	_world.addShip(new ShipBomber(200, 150, 1));
 	_world.addShip(new DroneShip(400, 150, 1));
 	_world.addShip(new DroneShip(400, 350, 2));
+	_world.addShip(new ShipBomber(500, 350, 2));
 	
 	//_world.addShip(new DroneShip(450, 250, 1));
 	//_world.addShip(new DroneShip(500, 250, 1));
@@ -84,6 +87,7 @@ void Game::update() {
 	//TODO - Refactor _allShips to allShips (its not an instance/member var)
 	auto _allShips = _world.getAllShips();
 	for (auto ship : _allShips) {
+		ship->updateComponents(dt, &_world);
 		ship->update(dt, &_world);
 	}
 
@@ -167,9 +171,9 @@ void Game::update() {
 				ship->setMoveLocation(_inputDevice.getX() + relX + _camera.getPosition().x, _inputDevice.getY() + relY + _camera.getPosition().y);
 			}
 
-			//Also reset the camera firstmove
 		}
 	} else {
+		//Also reset the camera firstmove
 		_firstMove = true;
 	}
 
@@ -185,21 +189,18 @@ void Game::update() {
 				}
 			}
 		}
-
-
-
 	}
 	
 }
 
 void Game::draw() {
 	//Mouse pointer graphic
-	//_window.setMouseCursorVisible(false);
-	//sf::RectangleShape rect;
-	//rect.setSize(sf::Vector2f(10,10));
-	//rect.setFillColor(sf::Color::Cyan);
-	//rect.setPosition(_inputDevice.getX(), _inputDevice.getY());
-	//_window.draw(rect);
+	_window.setMouseCursorVisible(false);
+	sf::RectangleShape rect;
+	rect.setSize(sf::Vector2f(2, 2));
+	rect.setFillColor(sf::Color::White);
+	rect.setPosition(_inputDevice.getX() + _camera.getPosition().x, _inputDevice.getY() + _camera.getPosition().y);
+	_window.draw(rect);
 
 	for (auto point : _selectPoints) {
 		sf::RectangleShape r;

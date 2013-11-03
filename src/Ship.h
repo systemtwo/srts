@@ -24,6 +24,8 @@ class Ship {
 		void setDead(bool dead) { _dead = dead; }
 		bool isDead() { return _dead; }
 
+		void updateComponents(double dt, World* world);
+		
 		virtual void update (double dt, World* world) = 0;
 		virtual void draw(sf::RenderWindow& window) = 0;
 
@@ -36,6 +38,7 @@ class Ship {
 		void setMoveLocation(double x, double y);
 
 		enum State { MOVING, SCANNING, ATTACKING };
+		enum ShipType { DRONE, BOMBER, DESTROYER }; 
 	protected:
 		std::string _name;
 		int _team;
