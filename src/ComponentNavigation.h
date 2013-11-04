@@ -11,7 +11,9 @@ class ComponentNavigation {
        			  _x(x), 
 			  _y(y),
        			  _targetX(x),
-			  _targetY(y) {
+			  _targetY(y),
+       			  _angle(0),
+       		          _atTargetLocation(true) {
 		}
 
 		virtual void update(double dt) = 0;

@@ -30,6 +30,7 @@ class Game {
 		bool _inShopMode;
 		std::vector<sf::Vector2f> _motionPoints;
 
+		enum PlayerState {NONE, WIN, LOSE} _playerState;
 		bool _running;
 		bool _isSelecting;
 		bool _firstMove;
@@ -43,6 +44,7 @@ class Game {
 		void pollForWindowEvent();
 		void update();
 		void draw();
+		void checkWinCondition();
 };
 
 #endif //GAME_H

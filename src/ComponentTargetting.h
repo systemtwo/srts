@@ -16,7 +16,7 @@ class ComponentTargetting {
 	       		: _x(x),
 			  _y(y),
        			  _scanRadius(scanRadius),
-       			  _targetShip(NULL) { }
+       			  _targetShip(nullptr) { }
 
 		void setOrigin(double x, double y) { _x = x; _y = y; }
 		void setOrigin(sf::Vector2f loc) { setOrigin(loc.x, loc.y); }

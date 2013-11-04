@@ -10,6 +10,7 @@
 #include "GeomUtil.h"
 #include "DroneShip.h"
 #include "ShipBomber.h"
+#include "ShipMothership.h"
 
 Game::Game() 
 	: _window(sf::VideoMode(800,600), "SimpleRTS"),
@@ -19,7 +20,8 @@ Game::Game()
 	  _world(ARENA_WIDTH, ARENA_HEIGHT),
 	  _camera(_window, 0, 0),
 	  _factory(1),
-	  _inShopMode(false) {
+	  _inShopMode(false),
+	  _playerState(NONE) {
 	
 	_window.setFramerateLimit(60);
 	srand(time(NULL));
@@ -35,6 +37,8 @@ Game::Game()
 	_world.addShip(new DroneShip(400, 350, 2));
 	_world.addShip(new ShipBomber(500, 350, 2));
 	
+	_world.addShip(new ShipMothership(50, 50, 1));
+	_world.addShip(new ShipMothership(600, 550, 2));
 	//_world.addShip(new DroneShip(450, 250, 1));
 	//_world.addShip(new DroneShip(500, 250, 1));
 	//_world.addShip(new DroneShip(550, 250, 1));
@@ -70,6 +74,10 @@ void Game::run() {
 
 void Game::update() {
 	auto dt = (double)_clock.restart().asMilliseconds() / 1000.0;
+	if (_playerState != NONE)
+		return;
+
+	checkWinCondition();
 
 	/*if (rand() % 150 == 0) {
 		_world.addShip(new DroneShip(rand()%500, rand()%500, 2));
@@ -157,6 +165,7 @@ void Game::update() {
 			double currX = _inputDevice.getX();
 			double currY = _inputDevice.getY();
 
+			//Check to make sure we don't go past the edges
 			_camera.move(_lastX - currX, _lastY - currY);
 			_camera.update();
 
@@ -254,6 +263,23 @@ void Game::update() {
 }
 
 void Game::draw() {
+	if (_playerState == WIN) {
+		sf::RectangleShape rect;
+		rect.setSize(sf::Vector2f(ARENA_WIDTH, ARENA_HEIGHT));
+		rect.setFillColor(sf::Color::Green);
+		rect.setPosition(0, 0);
+		_window.draw(rect);
+		return;
+	} else if (_playerState == LOSE) {
+		sf::RectangleShape rect;
+		rect.setSize(sf::Vector2f(ARENA_WIDTH, ARENA_HEIGHT));
+		rect.setFillColor(sf::Color::Red);
+		rect.setPosition(0, 0);
+		_window.draw(rect);
+		return;
+	}
+
+
 	//Mouse pointer graphic
 	_window.setMouseCursorVisible(false);
 	sf::RectangleShape rect;
@@ -306,4 +332,25 @@ void Game::pollForWindowEvent() {
 			_window.close();
 		}
 	}
+}
+
+void Game::checkWinCondition() {
+	bool playerShipFound = false;
+	int mothershipCount = 0;
+	for (auto ship : _world.getAllShips()) {
+		if (ship->getName().compare("Mothership") == 0) {
+			++mothershipCount;
+			if (ship->getTeam() == 1) {
+				playerShipFound = true;
+			}
+		}
+	}
+
+	if (playerShipFound == false) {
+		_playerState = LOSE;
+	} else if (playerShipFound == true && mothershipCount == 1) {
+		_playerState = WIN;
+	}
+
+	
 }

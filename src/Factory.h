@@ -15,9 +15,10 @@ class Factory {
 		Factory(int team) 
 			: _team(team),
 			  _income(100),
+			  _money(1000),
 			  _currBuildShip(ShipType::NONE),
+			  _buildTimer(0),
 			  INCOME_CYCLE_DURATION(5) {
-
 		}
 
 		void update(double dt, World* world) {
@@ -31,8 +32,13 @@ class Factory {
 			if (_buildTimer <= 0) {
 				switch (_currBuildShip) {
 					case ShipType::DRONE:
-						world->addShip(new DroneShip(rand() % 50, rand() % 50, _team));
+						{
+						double rx = rand() % 50;
+						double ry = rand() % 50;
+						std::cout << "Creating drone at: " << rx << " " << ry << std::endl;
+						world->addShip(new DroneShip(rx, ry, _team));
 						break;
+						}
 					case ShipType::BOMBER:
 						world->addShip(new ShipBomber(rand() % 50, rand() % 50, _team));
 						break;
@@ -72,6 +78,7 @@ class Factory {
 
 
 		void createShip(ShipType shipType) {
+			std::cout << "_money " << _money << std::endl;
 			//Check to see if we have enough money here
 			switch (shipType) {
 				case ShipType::DRONE:
