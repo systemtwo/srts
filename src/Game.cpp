@@ -74,8 +74,10 @@ void Game::run() {
 
 void Game::update() {
 	auto dt = (double)_clock.restart().asMilliseconds() / 1000.0;
-	if (_playerState != NONE)
+	if (_playerState != NONE) {
+		_running = false;
 		return;
+	}
 
 	checkWinCondition();
 
@@ -85,6 +87,7 @@ void Game::update() {
 	} else if (rand() % 150 == 1) {
 	}
 	*/
+	
 	//} else if (rand() % 150 == 2) {
 		//_world.addShip(new DroneShip(rand()%500, rand()%500, 1));
 	//}
