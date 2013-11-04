@@ -10,6 +10,8 @@
 #include "World.h"
 #include "Camera.h"
 
+#include "Factory.h"
+
 class Game {
 	public:
 		Game();
@@ -23,6 +25,8 @@ class Game {
 		World _world;
 		MouseInput _inputDevice;
 		Camera _camera;
+
+		Factory _factory;
 
 		bool _running;
 		bool _isSelecting;

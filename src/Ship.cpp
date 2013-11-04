@@ -11,6 +11,7 @@ Ship::Ship(std::string name, int team, ComponentNavigation* nav, ComponentTarget
 	  _team(team),
 	  _dead(false),
 	  _state(MOVING),
+	  _selected(false),
 	  _navigation(nav),
 	  _targetting(targ),
 	  _health(health),

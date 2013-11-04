@@ -7,6 +7,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 
+#include "ShipType.h"
+
 
 class World;
 class ComponentNavigation;
@@ -38,7 +40,6 @@ class Ship {
 		void setMoveLocation(double x, double y);
 
 		enum State { MOVING, SCANNING, ATTACKING };
-		enum ShipType { DRONE, BOMBER, DESTROYER }; 
 	protected:
 		std::string _name;
 		int _team;

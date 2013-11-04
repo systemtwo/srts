@@ -17,7 +17,8 @@ Game::Game()
 	  _running(true),
 	  _isSelecting(false),
 	  _world(ARENA_WIDTH, ARENA_HEIGHT),
-	  _camera(_window, 0, 0) {
+	  _camera(_window, 0, 0),
+	  _factory(1) {
 	
 	_window.setFramerateLimit(60);
 	srand(time(NULL));
@@ -78,8 +79,18 @@ void Game::update() {
 	//} else if (rand() % 150 == 2) {
 		//_world.addShip(new DroneShip(rand()%500, rand()%500, 1));
 	//}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num1)) {
+		_factory.createShip(ShipType::DRONE);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num2)) {
+		_factory.createShip(ShipType::BOMBER);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Num3)) {
+		_factory.createShip(ShipType::DESTROYER);
+	}
 
 
+	_factory.update(dt, &_world);
 
 	_world.cleanProjectiles();
 	_world.cleanShips();
