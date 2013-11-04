@@ -27,6 +27,8 @@ class Game {
 		Camera _camera;
 
 		Factory _factory;
+		bool _inShopMode;
+		std::vector<sf::Vector2f> _motionPoints;
 
 		bool _running;
 		bool _isSelecting;

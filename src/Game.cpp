@@ -18,7 +18,8 @@ Game::Game()
 	  _isSelecting(false),
 	  _world(ARENA_WIDTH, ARENA_HEIGHT),
 	  _camera(_window, 0, 0),
-	  _factory(1) {
+	  _factory(1),
+	  _inShopMode(false) {
 	
 	_window.setFramerateLimit(60);
 	srand(time(NULL));
@@ -189,19 +190,67 @@ void Game::update() {
 	}
 
 	if (_inputDevice.isAction()) {
-		//if (not on UI)
-		for (auto ship : _allShips) {
-			if (hypot(ship->getPosition().x - _inputDevice.getX(), 
-				  ship->getPosition().y - _inputDevice.getY()) < 20) {
+		if (_selectedShips.size() > 0) {
+			//Set target of ships
+			for (auto ship : _world.getEnemyShips(1)) {
+				if (hypot(ship->getPosition().x - _inputDevice.getX() - _camera.getPosition().x, 
+					  ship->getPosition().y - _inputDevice.getY() - _camera.getPosition().y) < 20) {
 
-				//Set this ship as target for all selected ships
-				for (auto sship : _selectedShips) {
-					sship->setTargetShip(ship);
+					//Set this ship as target for all selected ships
+					for (auto sship : _selectedShips) {
+						sship->setTargetShip(ship);
+					}
 				}
 			}
+		} else {
+			//Shop menu
+			_inShopMode = true;
 		}
 	}
-	
+	//Shop menu recording
+	if (_inShopMode) {
+		if (_motionPoints.size() < 60) {
+			//We have less than 60 samples
+			_motionPoints.push_back(sf::Vector2f(_inputDevice.getX(), _inputDevice.getY()));
+
+		} else {
+			_inShopMode = false;
+
+			//Classify movement
+			double sumX = 0;
+			double sumY = 0;
+
+			for (auto point : _motionPoints) {
+				//Note: we want the positions relative to the starting point
+				sumX += point.x - _motionPoints[0].x;
+				sumY += point.y - _motionPoints[0].y;
+			}
+
+			if (fabs(sumX) > fabs(sumY)) {
+				//Most likely in X direction
+				if (sumX > 0) {
+					//Most likely to the right
+					std::cout << "Right" << std::endl;
+					_factory.createShip(ShipType::DRONE);
+				} else {
+					//Most likely to the left
+					std::cout << "Left" << std::endl;
+					_factory.createShip(ShipType::DESTROYER);
+				}
+			} else {
+				if (sumY > 0) {
+					//Most likely to the bottom
+					std::cout << "Bottom" << std::endl;
+					_factory.createShip(ShipType::BOMBER);
+				} else {
+					//Most likely to the top
+					std::cout << "Up" << std::endl;
+					_factory.upgrade();
+				}
+			}
+			_motionPoints.clear();
+		}
+	}
 }
 
 void Game::draw() {
@@ -230,6 +279,19 @@ void Game::draw() {
 	auto allProjectiles = _world.getAllProjectiles();
 	for (auto projectile : allProjectiles) {
 		projectile->draw(_window);
+	}
+
+	if (_inShopMode) {
+		//Draw helper pie prompt
+	}
+
+	//Testing?
+	for (auto point : _motionPoints) {
+		sf::RectangleShape r;
+		r.setSize(sf::Vector2f(1,1));
+		r.setFillColor(sf::Color::Cyan);
+		r.setPosition(point);
+		_window.draw(r);
 	}
 
 	_window.display();
