@@ -27,19 +27,23 @@ Game::Game()
 	_window.setFramerateLimit(60);
 	srand(time(NULL));
 
+	//Make AI cheat
+	_enemyFactory.upgrade(true);
+	_enemyFactory.upgrade(true);
 
 	//Testing
 	//_playerShips.push_back(new DroneShip(200,100,1));
 	//_playerShips.push_back(new DroneShip(400,150,1));
 	
+	_world.addShip(new ShipMothership(50, 50, 1));
+	_world.addShip(new ShipMothership(600, 550, 2));
+
 	_world.addShip(new DroneShip(200, 100, 1));
 	_world.addShip(new ShipBomber(200, 150, 1));
 	_world.addShip(new DroneShip(400, 150, 1));
 	_world.addShip(new DroneShip(400, 350, 2));
 	_world.addShip(new ShipBomber(500, 350, 2));
 	
-	_world.addShip(new ShipMothership(50, 50, 1));
-	_world.addShip(new ShipMothership(600, 550, 2));
 	//_world.addShip(new DroneShip(450, 250, 1));
 	//_world.addShip(new DroneShip(500, 250, 1));
 	//_world.addShip(new DroneShip(550, 250, 1));
@@ -117,12 +121,19 @@ void Game::update() {
 	}
 
 	if (playerDroneCount > playerBombersCount) {
-		if (_enemyFactory.getMoney() > 300) 
+		if (_enemyFactory.getMoney() > 300) {
 			_enemyFactory.createShip(ShipType::DRONE);
+			if (rand() % 2 == 0) 
+				enemyShips[enemyShips.size()-1]->setTargetShip(playerShips[rand() % (playerShips.size() - 1)]);
+		}
 	} 
 	if (playerBombersCount > playerDroneCount) {
-		if (_enemyFactory.getMoney() > 300) 
+		if (_enemyFactory.getMoney() > 300) {
 			_enemyFactory.createShip(ShipType::DRONE);
+			if (rand() % 2 == 0) 
+				enemyShips[enemyShips.size()-1]->setTargetShip(playerShips[rand() % (playerShips.size() - 1)]);
+		}
+
 	}
 
 	if (playerBombersCount == 0 && playerDroneCount == 0) {
@@ -296,7 +307,7 @@ void Game::update() {
 				} else {
 					//Most likely to the top
 					std::cout << "Up" << std::endl;
-					_factory.upgrade();
+					_factory.upgrade(false);
 				}
 			}
 			_motionPoints.clear();

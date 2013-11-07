@@ -109,7 +109,15 @@ class Factory {
 			}
 		}
 
-		bool upgrade() { return false; }
+		bool upgrade(bool cheat) { 
+			if (cheat) {
+				_income += 100;
+				return;
+			}
+			if (_money >= 600) {
+				_income += 100;
+			}
+	       	}
 
 		int getMoney() { return _money; }
 		int getIncome() { return _income; }
