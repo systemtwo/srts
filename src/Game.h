@@ -27,6 +27,7 @@ class Game {
 		Camera _camera;
 
 		Factory _factory;
+		Factory _enemyFactory;
 		bool _inShopMode;
 		std::vector<sf::Vector2f> _motionPoints;
 

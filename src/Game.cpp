@@ -20,6 +20,7 @@ Game::Game()
 	  _world(ARENA_WIDTH, ARENA_HEIGHT),
 	  _camera(_window, 0, 0),
 	  _factory(1),
+	  _enemyFactory(2),
 	  _inShopMode(false),
 	  _playerState(NONE) {
 	
@@ -101,8 +102,46 @@ void Game::update() {
 		_factory.createShip(ShipType::DESTROYER);
 	}
 
+	//Simple enemy AI
+	int playerDroneCount = 0;
+	int playerBombersCount = 0;
+
+	auto playerShips = _world.getEnemyShips(2);
+	auto enemyShips = _world.getEnemyShips(1);
+
+	for (auto pship : playerShips) {
+		if (pship->getName().compare("Drone") == 0) 
+			++playerDroneCount;
+		if (pship->getName().compare("Bomber") == 0) 
+			++playerBombersCount;
+	}
+
+	if (playerDroneCount > playerBombersCount) {
+		if (_enemyFactory.getMoney() > 300) 
+			_enemyFactory.createShip(ShipType::DRONE);
+	} 
+	if (playerBombersCount > playerDroneCount) {
+		if (_enemyFactory.getMoney() > 300) 
+			_enemyFactory.createShip(ShipType::DRONE);
+	}
+
+	if (playerBombersCount == 0 && playerDroneCount == 0) {
+		for (auto eship : enemyShips) {
+			for (auto pship : playerShips) {
+				if (pship->getName().compare("Drone") == 0) 
+					eship->setTargetShip(pship);
+			}
+		}
+	}
+
+
+	
+	//end AI
+		
+
 
 	_factory.update(dt, &_world);
+	_enemyFactory.update(dt, &_world);
 
 	_world.cleanProjectiles();
 	_world.cleanShips();

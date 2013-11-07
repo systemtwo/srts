@@ -30,17 +30,22 @@ class Factory {
 			}
 
 			if (_buildTimer <= 0) {
+				//Spawn coords
+				double sx = 100 + rand() % 50;
+				double sy = 100 + rand() % 50;
+				if (_team != 1) {
+					sx += 400;
+					sy += 400;
+				}
 				switch (_currBuildShip) {
 					case ShipType::DRONE:
 						{
-						double rx = rand() % 50;
-						double ry = rand() % 50;
-						std::cout << "Creating drone at: " << rx << " " << ry << std::endl;
-						world->addShip(new DroneShip(rx, ry, _team));
+						std::cout << "Creating drone at: " << sx << " " << sy << std::endl;
+						world->addShip(new DroneShip(sx, sy, _team));
 						break;
 						}
 					case ShipType::BOMBER:
-						world->addShip(new ShipBomber(rand() % 50, rand() % 50, _team));
+						world->addShip(new ShipBomber(sx, sy, _team));
 						break;
 					case ShipType::DESTROYER:
 						break;
