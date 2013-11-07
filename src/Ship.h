@@ -53,7 +53,6 @@ class Ship {
 		std::unique_ptr<ComponentHealth> _health;
 		std::unique_ptr<ComponentWeapon> _weapon;
 		std::unique_ptr<ComponentCollision> _collision;
-		
 };
 
 #endif //SHIP_H

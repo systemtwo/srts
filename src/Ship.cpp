@@ -42,6 +42,7 @@ void Ship::setSelected(bool selected) {
 
 void Ship::setTargetShip(Ship* ship) {
 	_targetting->setTargetShip(ship);
+	_state = ATTACKING;
 }
 
 //Controller MUST call this! (AI or Player)
