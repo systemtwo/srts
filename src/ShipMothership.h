@@ -12,13 +12,15 @@
 #include "World.h"
 
 #include "ComponentNavigationNormal.h"
-#include "ComponentWeaponBomb.h"
+#include "ComponentWeaponNone.h"
+
+#include "TextureManager.h"
 
 class ShipMothership : public Ship {
 	public:
 		ShipMothership(double x, double y, int team)
 			: Ship("Mothership", team, new ComponentNavigationNormal(x, y, 5.0, PI), new ComponentTargetting(x, y, 0.0), 
-			       new ComponentHealth(400), new ComponentWeaponBomb(x, y, 0, team), new ComponentCollision(16, x, y))
+			       new ComponentHealth(400), new ComponentWeaponNone(x, y, 0, team), new ComponentCollision(16, x, y))
 			{
 
 	
@@ -31,16 +33,21 @@ class ShipMothership : public Ship {
 		void update(double dt, World* world) {}
 		void draw(sf::RenderWindow& window) {
 			//Draw Ship
-			sf::CircleShape sprite(16);
+			sf::RectangleShape sprite(sf::Vector2f(32,32));
+			sf::CircleShape select(20);
+			select.setFillColor(sf::Color::Transparent);
 			switch (_team) {
 				case 1:
-					if (!_selected)
-						sprite.setFillColor(sf::Color::Red);
-					else 
-						sprite.setFillColor(sf::Color::Yellow);
+					sprite.setTexture(TextureManager::getTexture("mothership1.png"));
+					if (_selected) {
+						select.setOutlineColor(sf::Color::Red);
+						select.setOutlineThickness(2);
+					} else {
+						//sprite.setFillColor(sf::Color::Yellow);
+					}
 					break;
 				case 2:
-					sprite.setFillColor(sf::Color::Magenta);
+					sprite.setTexture(TextureManager::getTexture("mothership2.png"));
 					break;
 				default:
 					std::cout << "Panic! No team! (Actually, its: " << _team << ")" << std::endl;
@@ -48,10 +55,15 @@ class ShipMothership : public Ship {
 
 			}
 
+			select.setPosition(_navigation->getPosition());
+			select.setOrigin(sf::Vector2f(20, 20));
+
 			sprite.setPosition(_navigation->getPosition());
 			sprite.setOrigin(sf::Vector2f(16, 16));
-			sprite.setRotation(GeomUtil::radToDeg(_navigation->getAngle()));
+			sprite.setRotation(GeomUtil::radToDeg(_navigation->getAngle()) - 180);
+
 			window.draw(sprite);
+			window.draw(select);
 
 			//Draw target location marker
 			if (_selected) {
@@ -63,7 +75,7 @@ class ShipMothership : public Ship {
 			}
 
 			//Draw Healthbar
-			_health->draw(window, _navigation->getPosition().x - 10, _navigation->getPosition().y - 15);
+			_health->draw(window, _navigation->getPosition().x - 20, _navigation->getPosition().y - 25);
 		}
 };
 

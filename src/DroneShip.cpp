@@ -2,6 +2,8 @@
 #include <cmath>
 #include <SFML/Graphics.hpp>
 
+#include "TextureManager.h"
+
 #include "DroneShip.h"
 #include "GeomUtil.h"
 #include "ComponentNavigationNormal.h"
@@ -23,16 +25,19 @@ void DroneShip::update(double dt, World* world) {
 
 void DroneShip::draw(sf::RenderWindow& window) {
 	//Draw Ship
-	sf::CircleShape sprite(5, 3);
+	sf::RectangleShape sprite(sf::Vector2f(8, 8));
+	sf::CircleShape select(8);
+	select.setFillColor(sf::Color::Transparent);
 	switch (_team) {
 		case 1:
-			if (!_selected)
-				sprite.setFillColor(sf::Color::Red);
-			else 
-				sprite.setFillColor(sf::Color::Yellow);
+			sprite.setTexture(TextureManager::getTexture("fighter1.png"));
+			if (_selected) {
+				select.setOutlineColor(sf::Color::Red);
+				select.setOutlineThickness(1);
+			}
 			break;
 		case 2:
-			sprite.setFillColor(sf::Color::Magenta);
+			sprite.setTexture(TextureManager::getTexture("fighter2.png"));
 			break;
 		default:
 			std::cout << "Panic! No team! (Actually, its: " << _team << ")" << std::endl;
@@ -46,12 +51,16 @@ void DroneShip::draw(sf::RenderWindow& window) {
 	    _navigation->getPosition().y > 1200) {
 		std::cout << "Rect out of bounds: " << _navigation->getPosition().x << ", " << _navigation->getPosition().y << std::endl;
 	}
+	select.setPosition(_navigation->getPosition());
+	select.setOrigin(sf::Vector2f(8, 8));
 
 	sprite.setPosition(_navigation->getPosition());
 	//sprite.setSize(sf::Vector2f(10, 10));
 	sprite.setOrigin(sf::Vector2f(5,5));
-	sprite.setRotation(GeomUtil::radToDeg(_navigation->getAngle()) - 30);
+	sprite.setRotation(GeomUtil::radToDeg(_navigation->getAngle()) - 180);
+
 	window.draw(sprite);
+	window.draw(select);
 
 	//Draw target location marker
 	if (_selected) {

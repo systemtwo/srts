@@ -14,6 +14,8 @@
 #include "ComponentNavigationNormal.h"
 #include "ComponentWeaponBomb.h"
 
+#include "TextureManager.h"
+
 class ShipBomber : public Ship {
 	public:
 		ShipBomber(double x, double y, int team)
@@ -31,28 +33,35 @@ class ShipBomber : public Ship {
 		void update(double dt, World* world) {}
 		void draw(sf::RenderWindow& window) {
 			//Draw Ship
-			sf::CircleShape sprite(5, 4);
+			sf::RectangleShape sprite(sf::Vector2f(12, 12));
+			sf::CircleShape select(10);
+			select.setFillColor(sf::Color::Transparent);
 			switch (_team) {
 				case 1:
-					if (!_selected)
-						sprite.setFillColor(sf::Color::Red);
-					else 
-						sprite.setFillColor(sf::Color::Yellow);
+					sprite.setTexture(TextureManager::getTexture("bomber1.png"));
+					if (_selected) {
+						select.setOutlineColor(sf::Color::Red);
+						select.setOutlineThickness(1);
+					}
 					break;
 				case 2:
-					sprite.setFillColor(sf::Color::Magenta);
+					sprite.setTexture(TextureManager::getTexture("bomber2.png"));
 					break;
 				default:
 					std::cout << "Panic! No team! (Actually, its: " << _team << ")" << std::endl;
 					break;
 
 			}
+			select.setPosition(_navigation->getPosition());
+			select.setOrigin(sf::Vector2f(11, 11));
 
 			sprite.setPosition(_navigation->getPosition());
 			//sprite.setSize(sf::Vector2f(10, 10));
 			sprite.setOrigin(sf::Vector2f(5,5));
-			sprite.setRotation(GeomUtil::radToDeg(_navigation->getAngle()));
+			sprite.setRotation(GeomUtil::radToDeg(_navigation->getAngle()) - 180);
+
 			window.draw(sprite);
+			window.draw(select);
 
 			//Draw target location marker
 			if (_selected) {
