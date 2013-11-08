@@ -8,6 +8,7 @@
 #include "Ship.h"
 #include "DroneShip.h"
 #include "ShipBomber.h"
+#include "ShipDestroyer.h"
 #include "ShipType.h"
 
 class Factory {
@@ -48,6 +49,7 @@ class Factory {
 						world->addShip(new ShipBomber(sx, sy, _team));
 						break;
 					case ShipType::DESTROYER:
+						world->addShip(new ShipDestroyer(sx, sy, _team));
 						break;
 					case ShipType::NONE:
 						break;
@@ -116,6 +118,7 @@ class Factory {
 				return false;
 			}
 			if (_money >= 600) {
+				_money -= 600;
 				_income += 100;
 				return true;
 			}

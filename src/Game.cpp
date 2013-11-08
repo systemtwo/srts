@@ -114,6 +114,7 @@ void Game::update() {
 	//Simple enemy AI
 	int playerDroneCount = 0;
 	int playerBombersCount = 0;
+	int playerDestroyersCount = 0;
 
 	auto playerShips = _world.getEnemyShips(2);
 	auto enemyShips = _world.getEnemyShips(1);
@@ -123,20 +124,29 @@ void Game::update() {
 			++playerDroneCount;
 		if (pship->getName().compare("Bomber") == 0) 
 			++playerBombersCount;
+		if (pship->getName().compare("Destroyer") == 0) 
+			++playerDestroyersCount;
 	}
 
 	if (playerShips.size() > 0) {
-		if (playerDroneCount > playerBombersCount) {
-			if (_enemyFactory.getMoney() > 300) {
-				_enemyFactory.createShip(ShipType::DRONE);
+		if (playerDroneCount > playerBombersCount && playerDroneCount > playerDestroyersCount) {
+			if (_enemyFactory.getMoney() > 400) {
+				_enemyFactory.createShip(ShipType::DESTROYER);
 				if (rand() % 2 == 0) 
 					enemyShips[enemyShips.size()-1]->setTargetShip(playerShips[rand() % (playerShips.size() - 1)]);
 			}
 		} 
-		if (playerBombersCount > playerDroneCount) {
-			if (_enemyFactory.getMoney() > 300) {
+		if (playerBombersCount > playerDroneCount && playerBombersCount > playerDestroyersCount) {
+			if (_enemyFactory.getMoney() > 100) {
 				_enemyFactory.createShip(ShipType::DRONE);
 				if (rand() % 2 == 0) 
+					enemyShips[enemyShips.size()-1]->setTargetShip(playerShips[rand() % (playerShips.size() - 1)]);
+			}
+		}
+		if (playerDestroyersCount > playerDroneCount && playerDestroyersCount > playerBombersCount) {
+			if (_enemyFactory.getMoney() > 300) {
+				if (rand() % 2 == 0) 
+				_enemyFactory.createShip(ShipType::BOMBER);
 					enemyShips[enemyShips.size()-1]->setTargetShip(playerShips[rand() % (playerShips.size() - 1)]);
 			}
 		}
@@ -277,7 +287,7 @@ void Game::update() {
 	}
 	//Shop menu recording
 	if (_inShopMode) {
-		if (_motionPoints.size() < 60) {
+		if (_motionPoints.size() < 30) {
 			//We have less than 60 samples
 			_motionPoints.push_back(sf::Vector2f(_inputDevice.getX() + _camera.getPosition().x, _inputDevice.getY() + _camera.getPosition().y));
 
@@ -349,11 +359,34 @@ void Game::draw() {
 	textMoney.setCharacterSize(48);
 	textMoney.setFont(monofur);
 
+	//Clear ss
+	ss.str(std::string());
+	ss.clear();
+
+	ss << "+" << _factory.getIncome();
+
+	//Display income
+	sf::Text textIncome;
+	textIncome.setString(ss.str());
+	textIncome.setPosition(_window.getSize().x - 120, 70);
+	textIncome.setCharacterSize(38);
+	textIncome.setFont(monofur);
+
+
 	_camera.resetPosition();
 	_window.draw(textMoney);
+	_window.draw(textIncome);
 	_camera.update();
 	
 
+	//Ship menu graphic
+	if (_inShopMode) {
+		sf::Sprite menu;
+		menu.setTexture(*TextureManager::getTexture("pieSelect.png"));
+		menu.setOrigin(menu.getTexture()->getSize().x/2, menu.getTexture()->getSize().y/2);
+		menu.setPosition(_motionPoints[0]);
+		_window.draw(menu);
+	}
 
 	//Mouse pointer graphic
 	_window.setMouseCursorVisible(false);
@@ -391,13 +424,6 @@ void Game::draw() {
 		_window.draw(r);
 	}
 
-	if (_inShopMode) {
-		sf::Sprite menu;
-		menu.setTexture(*TextureManager::getTexture("pieSelect.png"));
-		menu.setOrigin(menu.getTexture()->getSize().x/2, menu.getTexture()->getSize().y/2);
-		menu.setPosition(_motionPoints[0]);
-		_window.draw(menu);
-	}
 
 	_window.display();
 	_window.clear();

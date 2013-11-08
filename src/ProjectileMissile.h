@@ -28,7 +28,7 @@ class ProjectileMissile : public Projectile {
 			for (auto ship : _world->getEnemyShips(_team)) {
 				auto spos = ship->getPosition();
 				if (hypot(spos.x - _x, spos.y - _y) < 100) {
-					for (int i = 0; i <= 3; ++i) {
+					for (int i = 0; i <= 5; ++i) {
 						double angle = atan2(spos.y - _y, spos.x - _x);
 						_world->addProjectile(new ProjectileLaser(_x, _y, _angle + (i*PI/24), _team));
 						_world->addProjectile(new ProjectileLaser(_x, _y, _angle - (i*PI/24), _team));
