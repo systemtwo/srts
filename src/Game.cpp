@@ -12,6 +12,7 @@
 #include "GeomUtil.h"
 #include "DroneShip.h"
 #include "ShipBomber.h"
+#include "ShipDestroyer.h"
 #include "ShipMothership.h"
 
 #include "TextureManager.h"
@@ -43,6 +44,7 @@ Game::Game()
 	_world.addShip(new ShipMothership(600, 550, 2));
 
 	_world.addShip(new DroneShip(200, 100, 1));
+	_world.addShip(new ShipDestroyer(200, 100, 1));
 	_world.addShip(new ShipBomber(200, 150, 1));
 	_world.addShip(new DroneShip(400, 150, 1));
 	_world.addShip(new DroneShip(400, 350, 2));
