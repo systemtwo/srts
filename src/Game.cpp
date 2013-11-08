@@ -4,6 +4,8 @@
 #include <iostream>
 #include <algorithm>
 #include <ctime>
+#include <string>
+#include <sstream>
 
 #include "Game.h"
 #include "MouseInput.h"
@@ -11,6 +13,8 @@
 #include "DroneShip.h"
 #include "ShipBomber.h"
 #include "ShipMothership.h"
+
+#include "TextureManager.h"
 
 Game::Game() 
 	: _window(sf::VideoMode(800,600), "SimpleRTS"),
@@ -80,7 +84,6 @@ void Game::run() {
 void Game::update() {
 	auto dt = (double)_clock.restart().asMilliseconds() / 1000.0;
 	if (_playerState != NONE) {
-		_running = false;
 		return;
 	}
 
@@ -120,20 +123,21 @@ void Game::update() {
 			++playerBombersCount;
 	}
 
-	if (playerDroneCount > playerBombersCount) {
-		if (_enemyFactory.getMoney() > 300) {
-			_enemyFactory.createShip(ShipType::DRONE);
-			if (rand() % 2 == 0) 
-				enemyShips[enemyShips.size()-1]->setTargetShip(playerShips[rand() % (playerShips.size() - 1)]);
+	if (playerShips.size() > 0) {
+		if (playerDroneCount > playerBombersCount) {
+			if (_enemyFactory.getMoney() > 300) {
+				_enemyFactory.createShip(ShipType::DRONE);
+				if (rand() % 2 == 0) 
+					enemyShips[enemyShips.size()-1]->setTargetShip(playerShips[rand() % (playerShips.size() - 1)]);
+			}
+		} 
+		if (playerBombersCount > playerDroneCount) {
+			if (_enemyFactory.getMoney() > 300) {
+				_enemyFactory.createShip(ShipType::DRONE);
+				if (rand() % 2 == 0) 
+					enemyShips[enemyShips.size()-1]->setTargetShip(playerShips[rand() % (playerShips.size() - 1)]);
+			}
 		}
-	} 
-	if (playerBombersCount > playerDroneCount) {
-		if (_enemyFactory.getMoney() > 300) {
-			_enemyFactory.createShip(ShipType::DRONE);
-			if (rand() % 2 == 0) 
-				enemyShips[enemyShips.size()-1]->setTargetShip(playerShips[rand() % (playerShips.size() - 1)]);
-		}
-
 	}
 
 	if (playerBombersCount == 0 && playerDroneCount == 0) {
@@ -273,7 +277,7 @@ void Game::update() {
 	if (_inShopMode) {
 		if (_motionPoints.size() < 60) {
 			//We have less than 60 samples
-			_motionPoints.push_back(sf::Vector2f(_inputDevice.getX(), _inputDevice.getY()));
+			_motionPoints.push_back(sf::Vector2f(_inputDevice.getX() + _camera.getPosition().x, _inputDevice.getY() + _camera.getPosition().y));
 
 		} else {
 			_inShopMode = false;
@@ -316,21 +320,37 @@ void Game::update() {
 }
 
 void Game::draw() {
+	sf::Font monofur;
+	monofur.loadFromFile("res/monofur/monof55.ttf");
+
+	sf::Text textGameOver;
+	textGameOver.setCharacterSize(88);
+	textGameOver.setFont(monofur);
 	if (_playerState == WIN) {
-		sf::RectangleShape rect;
-		rect.setSize(sf::Vector2f(ARENA_WIDTH, ARENA_HEIGHT));
-		rect.setFillColor(sf::Color::Green);
-		rect.setPosition(0, 0);
-		_window.draw(rect);
-		return;
+		textGameOver.setString("Win!");
+		textGameOver.setPosition(_window.getSize().x/2 - textGameOver.getLocalBounds().width/2, _window.getSize().y/2 - textGameOver.getLocalBounds().height/2);
+		_window.draw(textGameOver);
 	} else if (_playerState == LOSE) {
-		sf::RectangleShape rect;
-		rect.setSize(sf::Vector2f(ARENA_WIDTH, ARENA_HEIGHT));
-		rect.setFillColor(sf::Color::Red);
-		rect.setPosition(0, 0);
-		_window.draw(rect);
-		return;
+		textGameOver.setString("Lose!");
+		textGameOver.setPosition(_window.getSize().x/2 - textGameOver.getLocalBounds().width/2, _window.getSize().y/2 - textGameOver.getLocalBounds().height/2);
+		_window.draw(textGameOver);
 	}
+
+	//Convert int (money) to string
+	std::stringstream ss;
+	ss << _factory.getMoney();
+
+	//Display money
+	sf::Text textMoney;
+	textMoney.setString(ss.str());
+	textMoney.setPosition(_window.getSize().x - 120, 20);
+	textMoney.setCharacterSize(48);
+	textMoney.setFont(monofur);
+
+	_camera.resetPosition();
+	_window.draw(textMoney);
+	_camera.update();
+	
 
 
 	//Mouse pointer graphic
@@ -360,10 +380,6 @@ void Game::draw() {
 		projectile->draw(_window);
 	}
 
-	if (_inShopMode) {
-		//Draw helper pie prompt
-	}
-
 	//Testing?
 	for (auto point : _motionPoints) {
 		sf::RectangleShape r;
@@ -371,6 +387,14 @@ void Game::draw() {
 		r.setFillColor(sf::Color::Cyan);
 		r.setPosition(point);
 		_window.draw(r);
+	}
+
+	if (_inShopMode) {
+		sf::Sprite menu;
+		menu.setTexture(*TextureManager::getTexture("pieSelect.png"));
+		menu.setOrigin(menu.getTexture()->getSize().x/2, menu.getTexture()->getSize().y/2);
+		menu.setPosition(_motionPoints[0]);
+		_window.draw(menu);
 	}
 
 	_window.display();

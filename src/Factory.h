@@ -110,13 +110,16 @@ class Factory {
 		}
 
 		bool upgrade(bool cheat) { 
+			//Returns upgrade successful
 			if (cheat) {
 				_income += 100;
-				return;
+				return false;
 			}
 			if (_money >= 600) {
 				_income += 100;
+				return true;
 			}
+			return false;
 	       	}
 
 		int getMoney() { return _money; }

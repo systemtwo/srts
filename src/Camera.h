@@ -24,6 +24,11 @@ class Camera {
 			_y = y;
 		}
 
+		void resetPosition() {
+			_view.setCenter(_window.getDefaultView().getCenter());
+			_window.setView(_view);
+		}
+
 		sf::Vector2f getPosition() {
 			return sf::Vector2f(_x, _y);
 		}
