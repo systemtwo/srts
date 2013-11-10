@@ -34,6 +34,7 @@ class Ship {
 		std::string getName();
 		int getTeam();
 		sf::Vector2f getPosition();
+		double getAngle();
 
 		void setSelected(bool selected);
 		void setTargetShip(Ship* ship);

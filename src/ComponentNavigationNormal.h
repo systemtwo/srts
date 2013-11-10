@@ -50,6 +50,8 @@ class ComponentNavigationNormal : public ComponentNavigation {
 				double xmove = currSpeed * cos(_angle) * dt;
 				double ymove = currSpeed * sin(_angle) * dt;
 
+				if (_stopMoving == true) 
+					return;
 				_x += xmove;
 				_y += ymove;
 			}

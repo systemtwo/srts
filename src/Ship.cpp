@@ -36,6 +36,10 @@ sf::Vector2f Ship::getPosition() {
 	return _navigation->getPosition();
 }
 
+double Ship::getAngle() {
+	return _navigation->getAngle();
+}
+
 void Ship::setSelected(bool selected) {
 	_selected = selected;
 }
@@ -108,6 +112,6 @@ void Ship::updateComponents(double dt, World* world) {
 	_collision->update(world->getEnemyProjectiles(_team));
 	_health->add(_collision->getDamage()*-1.0);
 
-	if (_health->getHealthValue() <= 0) 
+	if (_health->getHealthValue() <= 0)
 		setDead(true);
 }

@@ -6,7 +6,8 @@ class ComponentCollision {
 		ComponentCollision(double radius, double x, double y) 
 			: _x(x),
 			  _y(y),
-			  _radius(radius) {
+			  _radius(radius),
+       			  _accuDamage(0) {
 	       	}
 
 		void setPosition(double x, double y) { _x = x; _y = y; }

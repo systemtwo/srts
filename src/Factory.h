@@ -38,19 +38,59 @@ class Factory {
 					sx += 400;
 					sy += 400;
 				}
+				//Find mothership location to spawn ships there
+				auto playerShips = world->getEnemyShips(2);
+				auto enemyShips = world->getEnemyShips(1);
+
+				double spawnX = 0;
+				double spawnY = 0;
+				double spawnAngle = 0;
+
+				if (_team == 1) {
+					for (auto ship : playerShips) {
+						if (ship->getName().compare("Mothership") == 0) {
+							spawnX = ship->getPosition().x;
+							spawnY = ship->getPosition().y;
+							spawnAngle = ship->getAngle();
+							break;
+						}
+					}
+				} else {
+					for (auto ship : enemyShips) {
+						if (ship->getName().compare("Mothership") == 0) {
+							spawnX = ship->getPosition().x;
+							spawnY = ship->getPosition().y;
+							spawnAngle = ship->getAngle();
+							break;
+						}
+					}
+				}
+
 				switch (_currBuildShip) {
 					case ShipType::DRONE:
 						{
 						std::cout << "Creating drone at: " << sx << " " << sy << std::endl;
-						world->addShip(new DroneShip(sx, sy, _team));
+						Ship* ship = new DroneShip(spawnX, spawnY, _team);
+						ship->setMoveLocation(spawnX + 100 + (rand() % 100), spawnY);
+						world->addShip(ship);
 						break;
 						}
 					case ShipType::BOMBER:
-						world->addShip(new ShipBomber(sx, sy, _team));
+						{
+						Ship* ship = new ShipBomber(spawnX, spawnY, _team);
+						ship->setMoveLocation(spawnX + 100 + (rand() % 100), spawnY);
+						world->addShip(ship);
+						world->addShip(new ShipBomber(spawnX, spawnY, _team));
 						break;
+						}
 					case ShipType::DESTROYER:
-						world->addShip(new ShipDestroyer(sx, sy, _team));
+						{
+						Ship* ship = new ShipDestroyer(spawnX, spawnY, _team);
+						ship->setMoveLocation(spawnX + 100 + (rand() % 100), spawnY);
+						world->addShip(ship);
+						world->addShip(new ShipDestroyer(spawnX, spawnY, _team));
 						break;
+						}
 					case ShipType::NONE:
 						break;
 				}
