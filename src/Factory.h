@@ -71,14 +71,14 @@ class Factory {
 						{
 						std::cout << "Creating drone at: " << sx << " " << sy << std::endl;
 						Ship* ship = new DroneShip(spawnX, spawnY, _team);
-						ship->setMoveLocation(spawnX + 100 + (rand() % 100), spawnY);
+						ship->setMoveLocation(spawnX + 100 + (rand() % 100), spawnY + (rand() % 100));
 						world->addShip(ship);
 						break;
 						}
 					case ShipType::BOMBER:
 						{
 						Ship* ship = new ShipBomber(spawnX, spawnY, _team);
-						ship->setMoveLocation(spawnX + 100 + (rand() % 100), spawnY);
+						ship->setMoveLocation(spawnX + 100 + (rand() % 100), spawnY + (rand() % 100));
 						world->addShip(ship);
 						world->addShip(new ShipBomber(spawnX, spawnY, _team));
 						break;
@@ -86,7 +86,7 @@ class Factory {
 					case ShipType::DESTROYER:
 						{
 						Ship* ship = new ShipDestroyer(spawnX, spawnY, _team);
-						ship->setMoveLocation(spawnX + 100 + (rand() % 100), spawnY);
+						ship->setMoveLocation(spawnX + 100 + (rand() % 100), spawnY + (rand() % 100));
 						world->addShip(ship);
 						world->addShip(new ShipDestroyer(spawnX, spawnY, _team));
 						break;
