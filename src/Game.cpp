@@ -23,6 +23,7 @@ Game::Game()
 	  _running(true),
 	  _isSelecting(false),
 	  _world(ARENA_WIDTH, ARENA_HEIGHT),
+	  _background(ARENA_WIDTH, ARENA_HEIGHT),
 	  _camera(_window, 0, 0),
 	  _factory(1),
 	  _enemyFactory(2),
@@ -234,6 +235,8 @@ void Game::update() {
 			double currX = _inputDevice.getX();
 			double currY = _inputDevice.getY();
 
+			_background.processMovement(_lastX - currX, _lastY - currY);
+
 			//Check to make sure we don't go past the edges
 			_camera.move(_lastX - currX, _lastY - currY);
 			_camera.update();
@@ -332,21 +335,11 @@ void Game::update() {
 }
 
 void Game::draw() {
+	_background.draw(_window);
+
 	sf::Font monofur;
 	monofur.loadFromFile("res/monofur/monof55.ttf");
 
-	sf::Text textGameOver;
-	textGameOver.setCharacterSize(88);
-	textGameOver.setFont(monofur);
-	if (_playerState == WIN) {
-		textGameOver.setString("Win!");
-		textGameOver.setPosition(_window.getSize().x/2 - textGameOver.getLocalBounds().width/2, _window.getSize().y/2 - textGameOver.getLocalBounds().height/2);
-		_window.draw(textGameOver);
-	} else if (_playerState == LOSE) {
-		textGameOver.setString("Lose!");
-		textGameOver.setPosition(_window.getSize().x/2 - textGameOver.getLocalBounds().width/2, _window.getSize().y/2 - textGameOver.getLocalBounds().height/2);
-		_window.draw(textGameOver);
-	}
 
 	//Convert int (money) to string
 	std::stringstream ss;
@@ -372,10 +365,25 @@ void Game::draw() {
 	textIncome.setCharacterSize(38);
 	textIncome.setFont(monofur);
 
+	//Game over text
+	sf::Text textGameOver;
+	textGameOver.setCharacterSize(88);
+	textGameOver.setFont(monofur);
 
 	_camera.resetPosition();
 	_window.draw(textMoney);
 	_window.draw(textIncome);
+
+	if (_playerState == WIN) {
+		textGameOver.setString("Win!");
+		textGameOver.setPosition(_window.getSize().x/2 - textGameOver.getLocalBounds().width/2, _window.getSize().y/2 - textGameOver.getLocalBounds().height/2);
+		_window.draw(textGameOver);
+	} else if (_playerState == LOSE) {
+		textGameOver.setString("Lose!");
+		textGameOver.setPosition(_window.getSize().x/2 - textGameOver.getLocalBounds().width/2, _window.getSize().y/2 - textGameOver.getLocalBounds().height/2);
+		_window.draw(textGameOver);
+	}
+
 	_camera.update();
 	
 

@@ -80,7 +80,6 @@ class Factory {
 						Ship* ship = new ShipBomber(spawnX, spawnY, _team);
 						ship->setMoveLocation(spawnX + 100 + (rand() % 100), spawnY + (rand() % 100));
 						world->addShip(ship);
-						world->addShip(new ShipBomber(spawnX, spawnY, _team));
 						break;
 						}
 					case ShipType::DESTROYER:
@@ -88,7 +87,6 @@ class Factory {
 						Ship* ship = new ShipDestroyer(spawnX, spawnY, _team);
 						ship->setMoveLocation(spawnX + 100 + (rand() % 100), spawnY + (rand() % 100));
 						world->addShip(ship);
-						world->addShip(new ShipDestroyer(spawnX, spawnY, _team));
 						break;
 						}
 					case ShipType::NONE:

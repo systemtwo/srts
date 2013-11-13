@@ -9,6 +9,7 @@
 #include "MouseInput.h"
 #include "World.h"
 #include "Camera.h"
+#include "Background.h"
 
 #include "Factory.h"
 
@@ -25,6 +26,7 @@ class Game {
 		World _world;
 		MouseInput _inputDevice;
 		Camera _camera;
+		Background _background;
 
 		Factory _factory;
 		Factory _enemyFactory;
