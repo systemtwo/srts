@@ -11,7 +11,7 @@
 class ProjectileMissile : public Projectile {
 	public:
 		ProjectileMissile(double x, double y, double angle, int team, World* world)
-			: Projectile(30.0, x, y, angle, team),
+			: Projectile(10.0, x, y, angle, team),
 			  _world(world),
        			  _targettedShip(nullptr), 
        			  _angle(angle) {
@@ -128,7 +128,7 @@ class ProjectileMissile : public Projectile {
 		}
 
 	private:
-		const double SPEED = 200.0;
+		const double SPEED = 150.0;
 		const double TURNING_SPEED = 3.0 * PI;
 		const double SCAN_RADIUS = 500;
 		World* _world;

@@ -8,7 +8,7 @@
 class ComponentWeaponBomb : public ComponentWeapon {
 	public:
 		ComponentWeaponBomb(double x, double y, double angle, int team)
-	       		: ComponentWeapon(0.5, 100, 1, 1.0, x, y, angle, team) { 
+	       		: ComponentWeapon(0.5, 100, 1, 0.8, x, y, angle, team) { 
 		}
 
 		void fire(double dt, World* world) {

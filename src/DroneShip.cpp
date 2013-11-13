@@ -11,7 +11,7 @@
 
 DroneShip::DroneShip(double x, double y, int team) 
 	: Ship("Drone", team, new ComponentNavigationNormal(x, y, 100.0, PI), new ComponentTargetting(x, y, 100.0), 
-	       new ComponentHealth(100), new ComponentWeaponLaser(x, y, 0, team), new ComponentCollision(10, x, y))
+	       new ComponentHealth(60), new ComponentWeaponLaser(x, y, 0, team), new ComponentCollision(10, x, y))
 	{
 	
 	_health->setSize(sf::Vector2f(20, 5));

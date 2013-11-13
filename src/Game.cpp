@@ -117,7 +117,7 @@ void Game::update() {
 	int playerBombersCount = 0;
 	int playerDestroyersCount = 0;
 
-	auto playerShips = _world.getEnemyShips(2);
+	auto playerShips = _world.getTeamShips(1);
 	auto enemyShips = _world.getEnemyShips(1);
 
 	for (auto pship : playerShips) {
@@ -396,13 +396,6 @@ void Game::draw() {
 		_window.draw(menu);
 	}
 
-	//Mouse pointer graphic
-	_window.setMouseCursorVisible(false);
-	sf::RectangleShape rect;
-	rect.setSize(sf::Vector2f(2, 2));
-	rect.setFillColor(sf::Color::White);
-	rect.setPosition(_inputDevice.getX() + _camera.getPosition().x, _inputDevice.getY() + _camera.getPosition().y);
-	_window.draw(rect);
 
 	for (auto point : _selectPoints) {
 		sf::RectangleShape r;
@@ -431,6 +424,16 @@ void Game::draw() {
 		r.setPosition(point);
 		_window.draw(r);
 	}
+
+	//Mouse pointer graphic
+	_window.setMouseCursorVisible(false);
+	sf::Sprite mouse;
+	mouse.setTexture(*TextureManager::getTexture("frame2.png"));
+	//rect.setSize(sf::Vector2f(2, 2));
+	//rect.setFillColor(sf::Color::White);
+	mouse.setPosition(_inputDevice.getX() + _camera.getPosition().x, _inputDevice.getY() + _camera.getPosition().y);
+	_window.draw(mouse);
+
 
 
 	_window.display();

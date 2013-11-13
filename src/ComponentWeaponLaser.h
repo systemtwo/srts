@@ -8,7 +8,7 @@
 class ComponentWeaponLaser : public ComponentWeapon {
 	public:
 		ComponentWeaponLaser(double x, double y, double angle, int team)
-	       		: ComponentWeapon(0.5, 100, 4, 0.25, x, y, angle, team) { 
+	       		: ComponentWeapon(0.5, 100, 4, 0.20, x, y, angle, team) { 
 		}
 
 		void fire(double dt, World* world) {

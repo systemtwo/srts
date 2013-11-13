@@ -20,7 +20,7 @@ class ShipDestroyer : public Ship {
 	public:
 		ShipDestroyer(double x, double y, int team)
 			: Ship("Destroyer", team, new ComponentNavigationNormal(x, y, 20.0, PI), new ComponentTargetting(x, y, 500.0), 
-			       new ComponentHealth(300), new ComponentWeaponMissile(x, y, 0, team), new ComponentCollision(12, x, y))
+			       new ComponentHealth(250), new ComponentWeaponMissile(x, y, 0, team), new ComponentCollision(12, x, y))
 			{
 
 	

@@ -19,8 +19,8 @@
 class ShipMothership : public Ship {
 	public:
 		ShipMothership(double x, double y, int team)
-			: Ship("Mothership", team, new ComponentNavigationNormal(x, y, 5.0, PI), new ComponentTargetting(x, y, 0.0), 
-			       new ComponentHealth(400), new ComponentWeaponNone(x, y, 0, team), new ComponentCollision(16, x, y))
+			: Ship("Mothership", team, new ComponentNavigationNormal(x, y, 5.0, PI/6), new ComponentTargetting(x, y, 0.0), 
+			       new ComponentHealth(500), new ComponentWeaponNone(x, y, 0, team), new ComponentCollision(16, x, y))
 			{
 
 	

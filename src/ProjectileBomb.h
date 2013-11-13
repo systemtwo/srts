@@ -8,7 +8,7 @@
 class ProjectileBomb : public Projectile {
 	public:
 		ProjectileBomb(double x, double y, double angle, int team)
-			: Projectile(40.0, x, y, angle, team) {
+			: Projectile(60.0, x, y, angle, team) {
 		}
 
 		void update(double dt) { 

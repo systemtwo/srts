@@ -39,7 +39,7 @@ class Factory {
 					sy += 400;
 				}
 				//Find mothership location to spawn ships there
-				auto playerShips = world->getEnemyShips(2);
+				auto playerShips = world->getTeamShips(1);
 				auto enemyShips = world->getEnemyShips(1);
 
 				double spawnX = 0;
