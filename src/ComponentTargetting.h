@@ -42,7 +42,7 @@ class ComponentTargetting {
 			double minDist = _scanRadius;
 
 			//Don't forget to reset the target ship state
-			_targetShip = NULL;
+			_targetShip = nullptr;
 			for (auto ship : ships) {
 				double diffX = ship->getPosition().x - _x;
 				double diffY = ship->getPosition().y - _y;
