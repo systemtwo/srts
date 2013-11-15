@@ -78,7 +78,8 @@ class ComponentTargetting {
 				double angDiff = acos(dotproduct/(hypot(x1, y1) * hypot(x2, y2)));
 
 				if (angDiff < bound) {
-					return true;
+					if (hypot(x1 - _x, y1 - _y) < _scanRadius)
+						return true;
 				}
 				
 			}

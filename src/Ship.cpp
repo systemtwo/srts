@@ -102,7 +102,10 @@ void Ship::updateComponents(double dt, World* world) {
 			_weapon->setOrigin(_navigation->getPosition());
 			_weapon->setFacingAngle(_navigation->getAngle());
 
-			if (_weapon->inFiringArc(_targetting->getTargetAngle()))
+			//Disable long range firing
+			//if (_weapon->inFiringArc(_targetting->getTargetAngle()))
+				//_weapon->fire(dt, world);
+			if (_targetting->checkInAngle(world->getEnemyShips(_team), _navigation->getAngle(), _weapon->getFiringArc()))
 				_weapon->fire(dt, world);
 		}
 	}
