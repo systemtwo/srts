@@ -42,7 +42,7 @@ Game::Game()
 	//_playerShips.push_back(new DroneShip(400,150,1));
 	
 	_world.addShip(new ShipMothership(50, 50, 1));
-	_world.addShip(new ShipMothership(600, 550, 2));
+	_world.addShip(new ShipMothership(1500, 1100, 2));
 
 	_world.addShip(new DroneShip(200, 100, 1));
 	_world.addShip(new ShipDestroyer(200, 100, 1));
@@ -336,6 +336,14 @@ void Game::update() {
 
 void Game::draw() {
 	_background.draw(_window);
+
+	//Border
+	sf::RectangleShape border;
+	border.setSize(sf::Vector2f(ARENA_WIDTH, ARENA_HEIGHT));
+	border.setOutlineColor(sf::Color(50, 50, 50));
+	border.setOutlineThickness(300);
+	border.setFillColor(sf::Color::Transparent);
+	_window.draw(border);
 
 	sf::Font monofur;
 	monofur.loadFromFile("res/monofur/monof55.ttf");

@@ -5,6 +5,8 @@
 
 #include "Projectile.h"
 
+#include "Particle.h"
+
 #include "World.h"
 #include "GeomUtil.h"
 
@@ -14,7 +16,10 @@ class ProjectileMissile : public Projectile {
 			: Projectile(10.0, x, y, angle, team),
 			  _world(world),
        			  _targettedShip(nullptr), 
-       			  _angle(angle) {
+       			  _angle(angle),
+       			  _particles(x, y, 0.1) {
+			
+			_particles.start();
 		}
 
 		void update(double dt) { 
@@ -96,6 +101,9 @@ class ProjectileMissile : public Projectile {
 				_y += ymove;
 			}
 
+			_particles.setPosition(sf::Vector2f(_x, _y));
+			_particles.update(dt);
+
 			/*
 			double xspeed = SPEED * cos(_angle) * dt;
 			double yspeed = SPEED * sin(_angle) * dt;
@@ -125,6 +133,8 @@ class ProjectileMissile : public Projectile {
 			rect.setPosition(_x, _y);
 			rect.setRotation(GeomUtil::radToDeg(_angle + PI/2));
 			window.draw(rect);
+
+			_particles.draw(window);
 		}
 
 	private:
@@ -134,6 +144,8 @@ class ProjectileMissile : public Projectile {
 		World* _world;
 		Ship* _targettedShip;
 		double _angle;
+
+		ParticleManager _particles;
 };
 
 #endif //PROJECTILE_MISSILE_H
