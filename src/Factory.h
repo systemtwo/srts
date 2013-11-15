@@ -44,6 +44,8 @@ class Factory {
 
 				double spawnX = 0;
 				double spawnY = 0;
+				double moveToX = 0;
+				double moveToY = 0;
 				double spawnAngle = 0;
 
 				if (_team == 1) {
@@ -51,6 +53,8 @@ class Factory {
 						if (ship->getName().compare("Mothership") == 0) {
 							spawnX = ship->getPosition().x;
 							spawnY = ship->getPosition().y;
+							moveToX = rand() % 100;
+							moveToY = rand() % 100;
 							spawnAngle = ship->getAngle();
 							break;
 						}
@@ -60,6 +64,8 @@ class Factory {
 						if (ship->getName().compare("Mothership") == 0) {
 							spawnX = ship->getPosition().x;
 							spawnY = ship->getPosition().y;
+							moveToX = -(rand() % 100);
+							moveToY = -(rand() % 100);
 							spawnAngle = ship->getAngle();
 							break;
 						}
@@ -71,21 +77,21 @@ class Factory {
 						{
 						std::cout << "Creating drone at: " << sx << " " << sy << std::endl;
 						Ship* ship = new DroneShip(spawnX, spawnY, _team);
-						ship->setMoveLocation(spawnX + 100 + (rand() % 100), spawnY + (rand() % 100));
+						ship->setMoveLocation(spawnX + moveToX, spawnY + moveToY);
 						world->addShip(ship);
 						break;
 						}
 					case ShipType::BOMBER:
 						{
 						Ship* ship = new ShipBomber(spawnX, spawnY, _team);
-						ship->setMoveLocation(spawnX + 100 + (rand() % 100), spawnY + (rand() % 100));
+						ship->setMoveLocation(spawnX + moveToX, spawnY + moveToY);
 						world->addShip(ship);
 						break;
 						}
 					case ShipType::DESTROYER:
 						{
 						Ship* ship = new ShipDestroyer(spawnX, spawnY, _team);
-						ship->setMoveLocation(spawnX + 100 + (rand() % 100), spawnY + (rand() % 100));
+						ship->setMoveLocation(spawnX + moveToX, spawnY + moveToY);
 						world->addShip(ship);
 						break;
 						}
@@ -106,7 +112,7 @@ class Factory {
 							_currBuildShip = _buildQueue.front();
 							break;
 						case ShipType::DESTROYER:
-							_buildTimer = 5.0;	
+							_buildTimer = 4.0;	
 							_currBuildShip = _buildQueue.front();
 							break;
 						default:
